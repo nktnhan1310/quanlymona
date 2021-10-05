@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="App.Core.Models">
+      <HintPath>..\..\..\AppCore\App.Core\App.Core.Models\bin\netcoreapp3.1\App.Core.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="App.Core.Utilities">
+      <HintPath>..\..\..\AppCore\App.Core\App.Core.Utilities\bin\netcoreapp3.1\App.Core.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="QuanLy.Entities">
+      <HintPath>..\QuanLy.Entities\bin\netcoreapp3.1\QuanLy.Entities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

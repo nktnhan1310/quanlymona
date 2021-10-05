@@ -1,0 +1,393 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>QuanLy.Core</name>
+    </assembly>
+    <members>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueCompanyController.GetParentCompany(System.Nullable{System.Int32})">
+            <summary>
+            Lấy thông tin công ty cha từ thông tin công ty con hiện tại
+            </summary>
+            <param name="currentCompanyId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetProjectStatusCatalogue(System.String)">
+            <summary>
+            Lấy danh sách trạng thái của dự án
+            </summary>
+            <param name="searchContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetProjectCustomerStatusCatalogue(System.String)">
+            <summary>
+            Lấy danh sách trạng thái khách hàng của dự án
+            </summary>
+            <param name="searchContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetProjectTypeCatalogue(System.String)">
+            <summary>
+            Lấy danh sách loại hình dự án
+            </summary>
+            <param name="searchContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetSourceProjectTypeCatalogue(System.String)">
+            <summary>
+            Lấy danh sách nguồn của dự án
+            </summary>
+            <param name="searchContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetSourceTypeCatalogue(System.String)">
+            <summary>
+            Lấy thông tin danh sách danh mục nguồn
+            </summary>
+            <param name="searchContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetRequestTypeCatalogue(System.String)">
+            <summary>
+            Lấy thông tin danh sách danh mục yêu cầu
+            </summary>
+            <param name="searchContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetCompanyCatalogue(QuanLy.Entities.SearchCatalogueCompany)">
+            <summary>
+            Lấy thông tin danh sách danh mục công ty
+            </summary>
+            <param name="baseSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetCSKHStatusCatalogue">
+            <summary>
+            Lấy thông tin danh sách trạng thái của cskh
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetSaleStatusCatalogue">
+            <summary>
+            Lấy thông tin danh sách trạng thái của sale
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.ColorTaskController.AddItem(QuanLy.Model.RequestColorTaskModel)">
+            <summary>
+            Thêm mới color task
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.ColorTaskController.UpdateItem(QuanLy.Model.RequestColorTaskModel)">
+            <summary>
+            Cập nhật thông tin color task
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.GetById(System.Int32)">
+            <summary>
+            Lấy thông tin theo id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.AddItem(QuanLy.Model.RequestContactCustomerModel)">
+            <summary>
+            Thêm mới thông tin liên hệ
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.UpdateItem(QuanLy.Model.RequestContactCustomerModel)">
+            <summary>
+            Cập nhật thông tin liên hệ
+            </summary>
+            <param name="id"></param>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.MergeContactCustomer(QuanLy.Model.RequestMergeContactCustomerModel)">
+            <summary>
+            Merge thông tin liên hệ
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.UpdateCSKHStatus(System.Int32,System.Int32)">
+            <summary>
+            Cập nhật nhanh trạng thái chăm sóc khách hàng
+            </summary>
+            <param name="contactCustomerId"></param>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.UpdateSaleStatus(System.Int32,System.Int32)">
+            <summary>
+            Cập nhật trạng thái sale
+            </summary>
+            <param name="contactCustomerId"></param>
+            <param name="saleStatus"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.GetMappingRequestInfo(System.Int32,System.Int32)">
+            <summary>
+            Lấy thông tin yêu cầu liên hệ
+            </summary>
+            <param name="contactCustomerId"></param>
+            <param name="mappingRequestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.AddMappingRequestInfo(QuanLy.Model.RequestContactCustomerMappingRequestModel)">
+            <summary>
+            Thêm mới mapping yêu cầu
+            </summary>
+            <param name="requestContactCustomerMappingRequestModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.UpdateMappingRequestInfo(QuanLy.Model.RequestContactCustomerMappingRequestModel)">
+            <summary>
+            Cập nhật thông tin mapping yêu cầu
+            </summary>
+            <param name="requestContactCustomerMappingRequestModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.DeleteMappingRequestInfo(System.Int32)">
+            <summary>
+            Xóa thông tin mapping yêu cầu
+            </summary>
+            <param name="mappingRequestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.GetContactCustomerNote(System.Int32,System.Int32)">
+            <summary>
+            Lấy thông tin ghi chú
+            </summary>
+            <param name="contactCustomerId"></param>
+            <param name="contactCustomerNoteId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.AddContactCustomerNote(QuanLy.Model.RequestContactCustomerNoteModel)">
+            <summary>
+            Thêm mới thông tin ghi chú
+            </summary>
+            <param name="requestContactCustomerNoteModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.UpdateContactCustomerNote(QuanLy.Model.RequestContactCustomerNoteModel)">
+            <summary>
+            Cập nhật thông tin ghi chú
+            </summary>
+            <param name="requestContactCustomerNoteModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.DeleteContactCustomerNote(System.Int32)">
+            <summary>
+            Xóa thông tin ghi chú
+            </summary>
+            <param name="contactCustomerNoteId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.GetContactCustomerService(System.Int32,System.Int32)">
+            <summary>
+            Lấy thông tin dịch vụ
+            </summary>
+            <param name="contactCustomerId"></param>
+            <param name="contactCustomerServiceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.AddContactCustomerService(QuanLy.Model.RequestContactCustomerServiceModel)">
+            <summary>
+            Thêm mới thông tin dịch vụ
+            </summary>
+            <param name="requestContactCustomerServiceModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.UpdateContactCustomerService(QuanLy.Model.RequestContactCustomerServiceModel)">
+            <summary>
+            Cập nhật thông tin dịch vụ
+            </summary>
+            <param name="requestContactCustomerServiceModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.DeleteContactCustomerService(System.Int32)">
+            <summary>
+            Xóa thông tin dịch vụ
+            </summary>
+            <param name="contactCustomerServiceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.GetContactCustomerSaleRequest(System.Int32,System.Int32)">
+            <summary>
+            Lấy thông tin yêu cầu của liên hệ
+            </summary>
+            <param name="contactCustomerId"></param>
+            <param name="contactCustomerSaleRequestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.AddContactCustomerSaleRequest(QuanLy.Model.RequestContactCustomerSaleRequestModel)">
+            <summary>
+            Thêm mới thông tin yêu cầu của liên hệ
+            </summary>
+            <param name="requestContactCustomerSaleRequestModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.UpdateContactCustomerSaleRequest(QuanLy.Model.RequestContactCustomerSaleRequestModel)">
+            <summary>
+            Cập nhật thông tin yêu cầu của liên hệ
+            </summary>
+            <param name="requestContactCustomerSaleRequestModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.DeleteContactCustomerSaleRequest(System.Int32)">
+            <summary>
+            Xóa thông tin yêu cầu của liên hệ
+            </summary>
+            <param name="contactCustomerSaleRequestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.DeleteContactCustomerFile(System.Int32)">
+            <summary>
+            Xóa file của yêu cầu liên hệ
+            </summary>
+            <param name="contactCustomerFileId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.GetContactCount">
+            <summary>
+            Đếm tổng số liên hệ khách hàng
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ContactCustomerController.SendUserPasswordSMS(System.String,System.String)">
+            <summary>
+            Gửi SMS thông tin password cho user 
+            </summary>
+            <param name="phone"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectController.AddItem(QuanLy.Model.RequestProjectModel)">
+            <summary>
+            Thêm mới dự án
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectController.UpdateItem(QuanLy.Model.RequestProjectModel)">
+            <summary>
+            Cập nhật thông tin item
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectController.SendUserPasswordSMS(System.String,System.String)">
+            <summary>
+            Gửi SMS thông tin password cho user 
+            </summary>
+            <param name="phone"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectTaskController.GetById(System.Int32)">
+            <summary>
+            Lấy thông tin theo id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectTaskController.AddItem(QuanLy.Model.RequestProjectTaskModel)">
+            <summary>
+            Thêm mới task
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectTaskController.UpdateItem(QuanLy.Model.RequestProjectTaskModel)">
+            <summary>
+            Cập nhật thông tin task
+            </summary>
+            <param name="id"></param>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectTaskController.DeleteItem(System.Int32)">
+            <summary>
+            Xóa task
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Report.Base.BaseReportController`3.GetPagedListReport(`2)">
+            <summary>
+            Lấy danh sách phân trang báo cáo
+            </summary>
+            <param name="baseSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Report.Base.BaseReportController`3.ExportReport(`2)">
+            <summary>
+            Xuất báo cáo
+            </summary>
+            <param name="baseSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Report.Base.BaseReportController`3.GetTemplateFilePath(System.String)">
+            <summary>
+            Lấy đường dẫn file template
+            </summary>
+            <param name="fileTemplateName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Report.Base.BaseReportController`3.GetParameterReport(App.Core.Utilities.PagedList{`1},`2)">
+            <summary>
+            Lấy thông số parameter truyền vào
+            </summary>
+            <param name="pagedList"></param>
+            <param name="baseSearch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.WebHooks.WebHookContactCustomerController.SendRequestContactFromForm(QuanLy.Model.RequestContactCustomerFormModel)">
+            <summary>
+            Gửi thông tin liên hệ từ form
+            </summary>
+            <param name="customerContactRequestFromForm"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.WebHooks.WebHookContactCustomerController.SendRequestContactFromTawkTo(QuanLy.Model.RequestContactCustomerTawkModel)">
+            <summary>
+            Khách gửi yêu cầu từ tawk to
+            </summary>
+            <param name="customerContactRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.WebHooks.WebHookContactCustomerController.StartChatFromWebHook(QuanLy.Model.WebHookTawkRequestModel)">
+            <summary>
+            Khách gửi yêu cầu
+            </summary>
+            <param name="customerContactRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.WebHooks.WebHookContactCustomerController.EndChatFromWebHook(QuanLy.Model.WebHookTawkRequestModel)">
+            <summary>
+            Kết thúc trò chuyện
+            </summary>
+            <param name="customerContactRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.WebHooks.WebHookContactCustomerController.CreateTicketChatFromWebHook(QuanLy.Model.WebHookTawkRequestModel)">
+            <summary>
+            Tạo vé trò chuyện
+            </summary>
+            <param name="customerContactRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.WebHooks.WebHookContactCustomerController.SendRequestContactFromPhone(QuanLy.Model.WebHookContactCustomerPhoneModel)">
+            <summary>
+            Khách gửi yêu cầu thông qua tổng đài
+            </summary>
+            <param name="contactCustomerPhoneRequest"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

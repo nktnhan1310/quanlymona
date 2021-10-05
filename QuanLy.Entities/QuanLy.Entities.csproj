@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="App.Core.Entities">
+      <HintPath>..\..\..\AppCore\App.Core\App.Core.Entities\bin\netcoreapp3.1\App.Core.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="App.Core.Utilities">
+      <HintPath>..\..\..\AppCore\App.Core\App.Core.Utilities\bin\netcoreapp3.1\App.Core.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="QuanLy.Utilities">
+      <HintPath>..\QuanLy.Utilities\bin\netcoreapp3.1\QuanLy.Utilities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
