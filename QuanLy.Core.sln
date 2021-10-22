@@ -15,11 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLy.Model", "QuanLy.Mode
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLy.AppDbContext", "QuanLy.AppDbContext\QuanLy.AppDbContext.csproj", "{A210D0E6-C0D2-4430-97EE-09F95BAA331C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core", "..\..\AppCore\App.Core\App.Core\App.Core.csproj", "{F24C74AD-60B0-45B5-8E69-B064F6DA42D9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLy.Utilities", "QuanLy.Utilities\QuanLy.Utilities.csproj", "{CEF23C52-B57A-4199-8BAA-4D6F3BBD8642}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLy.Test", "QuanLy.Test\QuanLy.Test.csproj", "{EAA53069-A4DD-4E27-A952-5C33B2B36C02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLy.Test", "QuanLy.Test\QuanLy.Test.csproj", "{EAA53069-A4DD-4E27-A952-5C33B2B36C02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core", "..\AppCore\appcore\App.Core\App.Core.csproj", "{64532F46-962B-4F37-8E45-850F9FF3B3C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +51,6 @@ Global
 		{A210D0E6-C0D2-4430-97EE-09F95BAA331C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A210D0E6-C0D2-4430-97EE-09F95BAA331C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A210D0E6-C0D2-4430-97EE-09F95BAA331C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F24C74AD-60B0-45B5-8E69-B064F6DA42D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F24C74AD-60B0-45B5-8E69-B064F6DA42D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F24C74AD-60B0-45B5-8E69-B064F6DA42D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F24C74AD-60B0-45B5-8E69-B064F6DA42D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CEF23C52-B57A-4199-8BAA-4D6F3BBD8642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CEF23C52-B57A-4199-8BAA-4D6F3BBD8642}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEF23C52-B57A-4199-8BAA-4D6F3BBD8642}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{EAA53069-A4DD-4E27-A952-5C33B2B36C02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAA53069-A4DD-4E27-A952-5C33B2B36C02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAA53069-A4DD-4E27-A952-5C33B2B36C02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64532F46-962B-4F37-8E45-850F9FF3B3C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64532F46-962B-4F37-8E45-850F9FF3B3C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64532F46-962B-4F37-8E45-850F9FF3B3C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64532F46-962B-4F37-8E45-850F9FF3B3C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

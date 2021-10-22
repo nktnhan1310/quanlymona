@@ -267,6 +267,71 @@
             <param name="password"></param>
             <returns></returns>
         </member>
+        <member name="M:QuanLy.Core.Controllers.Newfeed.PostCommentController.GetParentComment(QuanLy.Core.Controllers.Newfeed.PostCommentController.SearchParentPostComment)">
+            <summary>
+            Lấy danh sách item phân trang Parent Comment của content
+            </summary>
+            <param name="searchParent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Newfeed.PostCommentController.GetChilComment(QuanLy.Core.Controllers.Newfeed.PostCommentController.SearchChilPostComment)">
+            <summary>
+            Lấy danh sách item phân trang Chil Comment của content
+            </summary>
+            <param name="searchChil"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Newfeed.PostCommentController.AddItem(QuanLy.Model.RequestModel.Newfeed.RequestPostCommentModel)">
+            <summary>
+            Thêm mới comment
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Newfeed.PostCommentController.UpdateItem(QuanLy.Model.RequestModel.Newfeed.RequestPostCommentModel)">
+            <summary>
+            Cập nhật thông tin comment
+            </summary>
+            <param name="id"></param>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Newfeed.PostCommentController.DeleteItem(System.Int32)">
+            <summary>
+            Xóa item
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Newfeed.PostCommentController.GetById(System.Int32)">
+            <summary>
+            Lấy thông tin theo id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Newfeed.PostContentController.AddItem(QuanLy.Model.RequestModel.Newfeed.RequestPostContentModel)">
+            <summary>
+            Thêm mới newfeed
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Newfeed.PostContentController.UpdateItem(QuanLy.Model.RequestModel.Newfeed.RequestPostContentModel)">
+            <summary>
+            Cập nhật thông tin NewFeed
+            </summary>
+            <param name="id"></param>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Newfeed.PostContentController.DeleteItem(System.Int32)">
+            <summary>
+            Xóa item
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:QuanLy.Core.Controllers.Project.ProjectController.AddItem(QuanLy.Model.RequestProjectModel)">
             <summary>
             Thêm mới dự án

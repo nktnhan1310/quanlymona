@@ -37,6 +37,14 @@ namespace QuanLy.Entities
         /// hạn dùng
         /// </summary>
         public string DeadlineName { get; set; }
+        /// <summary>
+        /// ghi chú
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// Danh mục
+        /// </summary>
+        public int? ServiceTypeId { get; set; }
 
         #region Extension Properties
 

@@ -29,6 +29,7 @@ using System.IO;
 using App.Core.Utilities;
 using QuanLy.AppDbContext;
 using App.Core;
+using QuanLy.Core.Hubs;
 
 namespace QuanLy.Core
 {
@@ -252,7 +253,8 @@ namespace QuanLy.Core
             {
                 endpoints.MapControllers();
                 //endpoints.MapHangfireDashboard();
-                endpoints.MapHub<NotificationHub>("/hubs/notifications").RequireCors(SignalROrigins);
+                //endpoints.MapHub<NotificationHub>("/hubs/notifications").RequireCors(SignalROrigins);
+                endpoints.MapHub<CommentHub>("/hubs/comment").RequireCors(SignalROrigins);
             });
         }
     }

@@ -4,8 +4,12 @@ using AutoMapper;
 using QuanLy.Entities;
 using QuanLy.Entities.Auth;
 using QuanLy.Entities.Catalogue;
+using QuanLy.Entities.Newfeed;
 using QuanLy.Model.Auth;
+using QuanLy.Model.Catalogue;
 using QuanLy.Model.Configuration;
+using QuanLy.Model.Newfeed;
+using QuanLy.Model.RequestModel.Newfeed;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -93,6 +97,10 @@ namespace QuanLy.Model
 
             #region Catalogue
 
+            CreateMap<ServiceTypeModel, ServiceTypes>().ReverseMap();
+            CreateMap<RequestCoreCatalogueModel, ServiceTypes>().ReverseMap();
+            CreateMap<PagedList<ServiceTypeModel>, PagedList<ServiceTypes>>().ReverseMap();
+
             CreateMap<ColorTaskModel, ColorTasks>().ReverseMap();
             CreateMap<RequestColorTaskModel, ColorTasks>().ReverseMap();
             CreateMap<PagedList<ColorTaskModel>, PagedList<ColorTasks>>().ReverseMap();
@@ -142,6 +150,15 @@ namespace QuanLy.Model
 
             #endregion
 
+            #region NewFeed
+            CreateMap<PostCommentModel, PostComments>().ReverseMap();
+            CreateMap<RequestPostCommentModel, PostComments>().ReverseMap();
+            CreateMap<PagedList<PostCommentModel>, PagedList<PostComments>>().ReverseMap();
+
+            CreateMap<PostContentModel, PostContents>().ReverseMap();
+            CreateMap<RequestPostContentModel, PostContents>().ReverseMap();
+            CreateMap<PagedList<PostContentModel>, PagedList<PostContents>>().ReverseMap();
+            #endregion
 
         }
     }

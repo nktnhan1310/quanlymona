@@ -21,10 +21,10 @@
 
   <ItemGroup>
     <Reference Include="App.Core.Entities">
-      <HintPath>..\..\..\AppCore\App.Core\App.Core.Entities\bin\netcoreapp3.1\App.Core.Entities.dll</HintPath>
+      <HintPath>..\..\AppCore\appcore\App.Core.Entities\bin\netcoreapp3.1\App.Core.Entities.dll</HintPath>
     </Reference>
     <Reference Include="App.Core.Interface">
-      <HintPath>..\..\..\AppCore\App.Core\App.Core.Interface\bin\netcoreapp3.1\App.Core.Interface.dll</HintPath>
+      <HintPath>..\..\AppCore\appcore\App.Core.Interface\bin\netcoreapp3.1\App.Core.Interface.dll</HintPath>
     </Reference>
     <Reference Include="QuanLy.Entities">
       <HintPath>..\QuanLy.Entities\bin\netcoreapp3.1\QuanLy.Entities.dll</HintPath>

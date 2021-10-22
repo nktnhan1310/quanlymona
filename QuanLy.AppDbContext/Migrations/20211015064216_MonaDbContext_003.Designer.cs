@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuanLy.AppDbContext;
 
 namespace QuanLy.AppDbContext.Migrations
 {
     [DbContext(typeof(MonaDbContext))]
-    partial class MonaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211015064216_MonaDbContext_003")]
+    partial class MonaDbContext_003
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

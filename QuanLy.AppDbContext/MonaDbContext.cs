@@ -4,6 +4,7 @@ using App.Core.Interface.DbContext;
 using Microsoft.EntityFrameworkCore;
 using QuanLy.Entities;
 using QuanLy.Entities.Catalogue;
+using QuanLy.Entities.Newfeed;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
@@ -66,6 +67,7 @@ namespace QuanLy.AppDbContext
             modelBuilder.Entity<TaskTypes>(x => x.ToTable("TaskTypes"));
             modelBuilder.Entity<HolidayConfigs>(x => x.ToTable("HolidayConfigs"));
             modelBuilder.Entity<ProjectCustomerStatuses>(x => x.ToTable("ProjectCustomerStatuses"));
+            modelBuilder.Entity<ServiceTypes>(x => x.ToTable("ServiceTypes"));
 
             #endregion
 
@@ -97,6 +99,11 @@ namespace QuanLy.AppDbContext
             modelBuilder.Entity<DeviceApps>(x => x.ToTable("DeviceApps"));
             modelBuilder.Entity<DeviceBrowsers>(x => x.ToTable("DeviceBrowsers"));
 
+            #endregion
+
+            #region NewFeed
+            modelBuilder.Entity<PostComments>(x => x.ToTable("PostComments"));
+            modelBuilder.Entity<PostContents>(x => x.ToTable("PostContents"));
             #endregion
 
             base.OnModelCreating(modelBuilder);
@@ -168,6 +175,13 @@ namespace QuanLy.AppDbContext
         public DbSet<SourceProjectTypes> SourceProjectTypes { get; set; }
         public DbSet<SourceTypes> SourceTypes { get; set; }
         public DbSet<TaskTypes> TaskTypes { get; set; }
+        public DbSet<ServiceTypes> ServiceTypes { get; set; }
+        #endregion
+
+        #region NewFeed
+
+        public DbSet<PostComments> PostComments { get; set; }
+        public DbSet<PostContents> PostContents { get; set; }
 
         #endregion
 

@@ -48,6 +48,8 @@ namespace QuanLy.Utilities
         /// </summary>
         public const string PROJECT_FOLDER = "DocumentProject";
 
+        public const string NEWFEED_FOLDER = "DocumentNewFeed";
+
         #endregion
 
         #region ROLE CODE

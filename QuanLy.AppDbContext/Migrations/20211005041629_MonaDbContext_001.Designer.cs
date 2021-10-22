@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuanLy.AppDbContext;
 
 namespace QuanLy.AppDbContext.Migrations
 {
     [DbContext(typeof(MonaDbContext))]
-    partial class MonaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211005041629_MonaDbContext_001")]
+    partial class MonaDbContext_001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1240,51 +1242,6 @@ namespace QuanLy.AppDbContext.Migrations
                     b.ToTable("RequestTypes");
                 });
 
-            modelBuilder.Entity("QuanLy.Entities.Catalogue.ServiceTypes", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServiceTypes");
-                });
-
             modelBuilder.Entity("QuanLy.Entities.Catalogue.SourceProjectTypes", b =>
                 {
                     b.Property<int>("Id")
@@ -1965,94 +1922,6 @@ namespace QuanLy.AppDbContext.Migrations
                     b.ToTable("HolidayConfigs");
                 });
 
-            modelBuilder.Entity("QuanLy.Entities.Newfeed.PostComments", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("CMT")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("PostCommentID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostContentID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PostComments");
-                });
-
-            modelBuilder.Entity("QuanLy.Entities.Newfeed.PostContents", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("BackgroundPost")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PostIMG")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PostType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TitlePost")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PostContents");
-                });
-
             modelBuilder.Entity("QuanLy.Entities.ProjectComments", b =>
                 {
                     b.Property<int>("Id")
@@ -2288,9 +2157,6 @@ namespace QuanLy.AppDbContext.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -2301,9 +2167,6 @@ namespace QuanLy.AppDbContext.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("ProjectServiceId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ServiceTypeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("StartDate")
@@ -2348,9 +2211,6 @@ namespace QuanLy.AppDbContext.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -2361,9 +2221,6 @@ namespace QuanLy.AppDbContext.Migrations
                         .HasColumnType("float");
 
                     b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ServiceTypeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("StartDate")

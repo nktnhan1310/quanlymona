@@ -13,7 +13,11 @@ using Microsoft.OpenApi.Models;
 using QuanLy.AppDbContext;
 using QuanLy.Interface;
 using QuanLy.Interface.Services;
+using QuanLy.Interface.Services.Catalogue;
+using QuanLy.Interface.Services.Newfeed;
 using QuanLy.Service;
+using QuanLy.Service.Services.Catalogue;
+using QuanLy.Service.Services.Newfeed;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -99,6 +103,9 @@ namespace QuanLy.Core
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IProjectStatusService, ProjectStatusService>();
             services.AddScoped<IProjectCustomerStatusService, ProjectCustomerStatusService>();
+            services.AddScoped<IServiceTypes, ServiceTypeService>();
+            services.AddScoped<IPostContents, PostContentService>();
+            services.AddScoped<IPostComments, PostCommentService>();
 
             #endregion
 

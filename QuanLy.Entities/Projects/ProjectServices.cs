@@ -49,6 +49,14 @@ namespace QuanLy.Entities
         public DateTime? DatePush { get; set; }
 
         public int? StillInUse { get; set; }
+        /// <summary>
+        /// ghi chú
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// Danh mục
+        /// </summary>
+        public int? ServiceTypeId { get; set; }
 
         #region Extension Properties
 
