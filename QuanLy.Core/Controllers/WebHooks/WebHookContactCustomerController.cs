@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using QuanLy.Entities;
@@ -40,11 +41,15 @@ namespace QuanLy.Core.Controllers.WebHooks
         protected IWebHookTawkHistoryService webHookTawkHistoryService;
         protected IWebHookPhoneHistoryService webHookPhoneHistoryService;
         protected IContactCustomerMappingUserService contactCustomerMappingUserService;
+        protected IProjectServiceService projectServiceService;
 
+
+        protected IConfiguration configuration;
         protected IHubContext<NotificationHub> hubContext;
         public WebHookContactCustomerController(IServiceProvider serviceProvider
             , IMapper mapper
             , IHubContext<NotificationHub> hubContext
+            , IConfiguration configuration
             )
         {
             contactCustomerService = serviceProvider.GetRequiredService<IContactCustomerService>();
@@ -58,9 +63,12 @@ namespace QuanLy.Core.Controllers.WebHooks
             webHookPhoneHistoryService = serviceProvider.GetRequiredService<IWebHookPhoneHistoryService>();
             webHookTawkHistoryService = serviceProvider.GetRequiredService<IWebHookTawkHistoryService>();
             contactCustomerMappingUserService = serviceProvider.GetRequiredService<IContactCustomerMappingUserService>();
+            projectServiceService = serviceProvider.GetRequiredService<IProjectServiceService>();
 
             this.mapper = mapper;
             this.hubContext = hubContext;
+
+            this.configuration = configuration;
         }
 
         #region WEB HOOK FORM
@@ -1064,5 +1072,28 @@ namespace QuanLy.Core.Controllers.WebHooks
 
         #endregion
 
+
+        #region test onesignal
+
+        [HttpPost("send-one-signal")]
+        public async Task<IActionResult> CreateNotification(string title, string content, List<string> PlayerIds)
+        {
+            var AppId = Guid.Parse(configuration.GetSection("OneSignal:AppId").Value.ToString());
+            var AppSecret = configuration.GetSection("OneSignal:AppSecret").Value.ToString();
+            string Url = "https://zingnews.vn/";
+            string result = await OneSignalPushNotification.PushNotification(title, content,PlayerIds, AppId, AppSecret, Url);
+            return Ok(result);
+        }
+
+        //[HttpPost("send-one-signal-2")]
+        //public async Task<IActionResult> CreateNotification2(string title, string content, List<string> External)
+        //{
+        //    var AppId = Guid.Parse(configuration.GetSection("OneSignal:AppId").Value.ToString());
+        //    var AppSecret = configuration.GetSection("OneSignal:AppSecret").Value.ToString();
+        //    string Url = "https://zingnews.vn/";
+        //    var result = await OneSignalPushNotification.PushNotification2(title, content, External, AppId, AppSecret, Url);
+        //    return Ok(result);
+        //}
+        #endregion
     }
 }

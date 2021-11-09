@@ -544,5 +544,37 @@ namespace QuanLy.Service
 
             return result;
         }
+
+        public async Task<List<Users>> Mona_sp_LoadUser_Role_Leader()
+        {
+            return await Task.Run(() =>
+            {
+                DataTable dataTable = new DataTable();
+                SqlConnection connection = null;
+                SqlCommand command = null;
+                try
+                {
+                    List<Users> Model = new List<Users>();
+                    connection = (SqlConnection)coreDbContext.Database.GetDbConnection();
+                    command = connection.CreateCommand();
+                    connection.Open();
+                    command.CommandText = "Mona_sp_LoadUser_Role_Leader";
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+                    sqlDataAdapter.Fill(dataTable);
+                    //pagedList.TotalItem = int.Parse(command.Parameters["@TotalPage"].Value.ToString());
+                    Model = MappingDataTable.ConvertToList<Users>(dataTable);
+                    return Model;
+                }
+                finally
+                {
+                    if (connection != null && connection.State == System.Data.ConnectionState.Open)
+                        connection.Close();
+
+                    if (command != null)
+                        command.Dispose();
+                }
+            });
+        }
     }
 }

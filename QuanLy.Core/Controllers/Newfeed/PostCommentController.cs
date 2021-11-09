@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using QuanLy.Core.Hubs;
 using QuanLy.Entities.Newfeed;
+using QuanLy.Interface;
+using QuanLy.Interface.Services;
 using QuanLy.Interface.Services.Newfeed;
 using QuanLy.Model.Newfeed;
 using QuanLy.Model.RequestModel.Newfeed;
+using QuanLy.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,6 +35,8 @@ namespace QuanLy.Core.Controllers.Newfeed
         protected IPostContents postContents;
         protected IConfiguration configuration;
         protected IPostComments PostComments;
+        protected INotificationSingle notificationSingle;
+        protected IUserService userService;
         public PostCommentController(IServiceProvider serviceProvider, ILogger<BaseController<PostComments, PostCommentModel, RequestPostCommentModel, BaseSearch>> logger, IWebHostEnvironment env
             , IHubContext<CommentHub> hubContext
             , IConfiguration configuration) : base(serviceProvider, logger, env)
@@ -40,6 +44,8 @@ namespace QuanLy.Core.Controllers.Newfeed
             this.domainService = serviceProvider.GetRequiredService<IPostComments>();
             this.postContents = serviceProvider.GetRequiredService<IPostContents>();
             this.PostComments = serviceProvider.GetRequiredService<IPostComments>();
+            this.notificationSingle = serviceProvider.GetRequiredService<INotificationSingle>();
+            this.userService = serviceProvider.GetRequiredService<IUserService>();
             this._hubContext = hubContext;
 
         }
@@ -130,21 +136,40 @@ namespace QuanLy.Core.Controllers.Newfeed
             item.CreatedBy = LoginContext.Instance.CurrentUser.UserName;
             item.Active = true;
             item.UID = LoginContext.Instance.CurrentUser.UserId;
+            var FullName = LoginContext.Instance.CurrentUser.FullName;
             var DataPostContent = this.postContents.GetById(item.PostContentID);
             if(DataPostContent != null)
             {
-
-                if(item.PostCommentID != 0)
+                string datalink = "/Admin/NewFeed/NewFeed/" + DataPostContent.Id;
+                if (item.PostCommentID != 0)
                 {
                     var DataParentPostComment = this.domainService.GetById(item.PostCommentID);
                     if(DataParentPostComment == null)
                     {
                         throw new KeyNotFoundException("Item Parent Comment không tồn tại");
                     }
+
+                    success = await this.domainService.CreateAsync(item);
+                    appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+
+                    //Người phản hồi bình luận
+                    if (success && DataParentPostComment.UID != item.UID)
+                    {
+                        await this.notificationSingle.CreateNotificationfeedbackComment(item.CreatedBy, FullName, datalink, " đã phản hồi bình luận của bạn", DataParentPostComment.UID);
+                    }
                 }
-                appDomainResult.ResultCode = (int)HttpStatusCode.OK;
-                success = await this.domainService.CreateAsync(item);
-                await _hubContext.Clients.All.SendAsync(CoreContants.GET_TOTAL_NOTIFICATION, item.Id);
+                else
+                {
+                    success = await this.domainService.CreateAsync(item);
+                    appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+                }
+
+                //Người bình luận bài viết
+                if (success && DataPostContent.CreatedBy != item.CreatedBy)
+                {
+                    await this.notificationSingle.CreateNotificationfeedback(item.CreatedBy, FullName, datalink, " đã bình luận về bài viết của bạn", DataPostContent.CreatedBy);
+                }
+
             }
             else
             {
@@ -197,7 +222,7 @@ namespace QuanLy.Core.Controllers.Newfeed
                 appDomainResult.ResultCode = (int)HttpStatusCode.OK;
                 item.UID = UID;
                 success = await this.domainService.UpdateAsync(item);
-                await _hubContext.Clients.All.SendAsync(CoreContants.GET_TOTAL_NOTIFICATION, item.Id);
+                await _hubContext.Clients.All.SendAsync(Contants.SR_POST_COMMENT, item.Id);
             }
             else
             {
@@ -236,7 +261,7 @@ namespace QuanLy.Core.Controllers.Newfeed
                         }
                     }
                     success = await this.domainService.DeleteAsync(id);
-                    await _hubContext.Clients.All.SendAsync(CoreContants.GET_TOTAL_NOTIFICATION,0);
+                    await _hubContext.Clients.All.SendAsync(Contants.SR_POST_COMMENT_DELETE, DataExist);
                     if (success)
                     {
                         appDomainResult.ResultCode = (int)HttpStatusCode.OK;

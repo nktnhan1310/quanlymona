@@ -106,6 +106,9 @@ namespace QuanLy.AppDbContext
             modelBuilder.Entity<PostContents>(x => x.ToTable("PostContents"));
             #endregion
 
+            #region Notification
+            modelBuilder.Entity<NotificationSingles>(x => x.ToTable("NotificationSingles"));
+            #endregion
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<UserFileCores> UserFiles { get; set; }
@@ -183,6 +186,10 @@ namespace QuanLy.AppDbContext
         public DbSet<PostComments> PostComments { get; set; }
         public DbSet<PostContents> PostContents { get; set; }
 
+        #endregion
+
+        #region
+        public DbSet<NotificationSingles> NotificationSingles { get; set; }
         #endregion
 
     }

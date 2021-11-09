@@ -29,13 +29,17 @@ using System.IO;
 using App.Core.Utilities;
 using QuanLy.AppDbContext;
 using App.Core;
-using QuanLy.Core.Hubs;
+using QuanLy.Service;
+using QuanLy.Interface;
+using Hangfire.Storage;
+using QuanLy.Utilities;
 
 namespace QuanLy.Core
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public ProjectServiceService projectServiceService { get; }
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -162,20 +166,20 @@ namespace QuanLy.Core
             services.AddSignalR();
 
             // Add Hangfire services.
-            //services.AddHangfire(configuration => configuration
-            //    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-            //    .UseSqlServerStorage(Configuration.GetConnectionString("HangFire"), new SqlServerStorageOptions
-            //    {
-            //        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-            //        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-            //        QueuePollInterval = TimeSpan.Zero,
-            //        UseRecommendedIsolationLevel = true,
-            //        UsePageLocksOnDequeue = true,
-            //        DisableGlobalLocks = true
-            //    }));
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSqlServerStorage(Configuration.GetConnectionString("HangFire"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    UsePageLocksOnDequeue = true,
+                    DisableGlobalLocks = true
+                }));
 
-            //// Add the processing server as IHostedService
-            //services.AddHangfireServer();
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -233,8 +237,16 @@ namespace QuanLy.Core
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMiddleware<JwtMiddleware>();
             app.UseAuthorization();
-            //app.UseHangfireDashboard();
-            //app.UseHangfireServer();
+            app.UseHangfireDashboard("/mydashboard");
+            RecurringJob.AddOrUpdate<ProjectServiceService>(x => x.UpdateServiceExprireDate(), Cron.Daily);
+            //using (var connection = JobStorage.Current.GetConnection())
+            //{
+            //    foreach (var recurringJob in connection.GetRecurringJobs())
+            //    {
+            //        RecurringJob.RemoveIfExists(recurringJob.Id);
+            //    }
+            //}
+            app.UseHangfireServer();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -252,7 +264,7 @@ namespace QuanLy.Core
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                //endpoints.MapHangfireDashboard();
+                endpoints.MapHangfireDashboard();
                 //endpoints.MapHub<NotificationHub>("/hubs/notifications").RequireCors(SignalROrigins);
                 endpoints.MapHub<CommentHub>("/hubs/comment").RequireCors(SignalROrigins);
             });

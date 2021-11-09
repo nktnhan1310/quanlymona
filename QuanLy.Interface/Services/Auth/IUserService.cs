@@ -19,5 +19,11 @@ namespace QuanLy.Interface.Services
         Task<bool> UpdateUserPassword(int userId, string newPassword);
 
         Task<bool> IsInUserGroup(int userId, string userGroupCode);
+
+        /// <summary>
+        /// Lấy danh sach user Leader Manager
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Users>> Mona_sp_LoadUser_Role_Leader();
     }
 }

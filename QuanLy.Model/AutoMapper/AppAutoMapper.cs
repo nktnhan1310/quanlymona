@@ -1,4 +1,6 @@
-﻿using App.Core.Models.DomainModel;
+﻿using App.Core.Entities.Configuration;
+using App.Core.Models;
+using App.Core.Models.DomainModel;
 using App.Core.Utilities;
 using AutoMapper;
 using QuanLy.Entities;
@@ -62,6 +64,15 @@ namespace QuanLy.Model
             CreateMap<ProjectUserModel, ProjectUsers>().ReverseMap();
             CreateMap<RequestProjectUserModel, ProjectUsers>().ReverseMap();
             CreateMap<PagedList<ProjectUserModel>, PagedList<ProjectUsers>>().ReverseMap();
+
+            CreateMap<ProjectServiceModel, ProjectServices>().ReverseMap();
+            CreateMap<RequestProjectServiceModel, ProjectServices>().ReverseMap();
+            CreateMap<PagedList<ProjectServiceModel>, PagedList<ProjectServices>>().ReverseMap();
+
+            CreateMap<RequestProjectServiceModel, ProjectServiceHistories>().ReverseMap();
+            CreateMap<ProjectServiceHistoriesModel, ProjectServiceHistories>().ReverseMap();
+            CreateMap<RequestProjectServiceHistoriesModel, ProjectServiceHistories>().ReverseMap();
+            CreateMap<PagedList<ProjectServiceHistoriesModel>, PagedList<ProjectServiceHistories>>().ReverseMap();
 
             #endregion
 
@@ -159,6 +170,11 @@ namespace QuanLy.Model
             CreateMap<RequestPostContentModel, PostContents>().ReverseMap();
             CreateMap<PagedList<PostContentModel>, PagedList<PostContents>>().ReverseMap();
             #endregion
+
+            #region Email
+            CreateMap<EmailConfigurationCoreModel, EmailConfigurationCores>().ReverseMap();
+            #endregion
+
 
         }
     }

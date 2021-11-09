@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
 
 namespace QuanLy.Entities
@@ -66,6 +67,85 @@ namespace QuanLy.Entities
         [NotMapped]
         public string ProjectName { get; set; }
 
+        /// <summary>
+        /// Tên dịch vụ sử dụng
+        /// </summary>
+        [NotMapped]
+        public string ServiceName { get; set; }
+
+        [NotMapped]
+        public int? TotalPage { get; set; }
+
+        [NotMapped]
+        public string ListPlayerId { get; set; }
+
+        [NotMapped]
+        public IList<ListDataPlayerId> dataPlayerIds
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ListPlayerId))
+                {
+                    var DataSplit = ListPlayerId.Split(';').ToArray();
+                    if (DataSplit != null && DataSplit.Any())
+                    {
+                        List<ListDataPlayerId> result = new List<ListDataPlayerId>();
+                        foreach (var item in DataSplit)
+                        {
+                            result.Add(new ListDataPlayerId()
+                            {
+                                PlayerId = item
+                            });
+                        }
+                        return result;
+                    }
+                }
+                return null;
+            }
+        }
+        [NotMapped]
+        public string ListUserId { get; set; }
+
+        [NotMapped]
+        public IList<ListDataUserId> dataUserIds
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ListUserId))
+                {
+                    var DataSplit = ListUserId.Split(';').ToArray();
+                    if (DataSplit != null && DataSplit.Any())
+                    {
+                        List<ListDataUserId> result = new List<ListDataUserId>();
+                        foreach (var item in DataSplit)
+                        {
+                            var itemProperties = item.Split('_').ToArray();
+                            if (itemProperties != null && itemProperties.Any())
+                            {
+                                result.Add(new ListDataUserId()
+                                {
+                                    Gmail = itemProperties[0],
+                                    FullName = itemProperties[1]
+                                }); ;
+                            }
+                        }
+                        return result;
+                    }
+                }
+                return null;
+            }
+        }
+
         #endregion
+    }
+
+    public class ListDataPlayerId
+    {
+        public string PlayerId { get; set; }
+    }
+    public class ListDataUserId
+    {
+        public string Gmail { get; set; }
+        public string FullName { get; set; }
     }
 }

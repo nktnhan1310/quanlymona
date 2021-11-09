@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="App.Core.Entities">
+      <HintPath>..\..\AppCore\appcore\App.Core.Entities\bin\netcoreapp3.1\App.Core.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="App.Core.Models">
       <HintPath>..\..\AppCore\appcore\App.Core.Models\bin\netcoreapp3.1\App.Core.Models.dll</HintPath>
     </Reference>

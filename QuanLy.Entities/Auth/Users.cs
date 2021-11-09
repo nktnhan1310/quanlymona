@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
 
 namespace QuanLy.Entities
@@ -171,7 +172,34 @@ namespace QuanLy.Entities
         [NotMapped]
         public IList<UserFileCores> UserFiles { get; set; }
 
+        [NotMapped]
+        public string ListPlayerId { get; set; }
 
+
+        [NotMapped]
+        public IList<ListDataPlayerId> dataPlayerIds
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ListPlayerId))
+                {
+                    var DataSplit = ListPlayerId.Split(';').ToArray();
+                    if (DataSplit != null && DataSplit.Any())
+                    {
+                        List<ListDataPlayerId> result = new List<ListDataPlayerId>();
+                        foreach (var item in DataSplit)
+                        {
+                            result.Add(new ListDataPlayerId()
+                            {
+                                PlayerId = item
+                            });
+                        }
+                        return result;
+                    }
+                }
+                return null;
+            }
+        }
         #endregion
 
         /// <summary>

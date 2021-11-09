@@ -80,5 +80,24 @@ namespace QuanLy.Utilities
         public const string SMS_PASSWORD_TEMPLATE = "SMS_PASSWORD_TEMPLATE";
 
         #endregion
+
+        #region SignalR
+        /// <summary>
+        /// Signalr có thông báo mới
+        /// </summary>
+        public const string SR_NOTIFICATION = "SR_NOTIFICATION";
+
+
+        /// <summary>
+        /// signalr khi comment vào bài viết
+        /// </summary>
+        public const string SR_POST_COMMENT = "SR_POST_COMMENT";
+
+        /// <summary>
+        /// signalr khi comment xóa
+        /// </summary>
+        public const string SR_POST_COMMENT_DELETE = "SR_POST_COMMENT_DELETE";
+
+        #endregion
     }
 }

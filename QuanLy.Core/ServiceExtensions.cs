@@ -55,6 +55,8 @@ namespace QuanLy.Core
             services.AddScoped<IProjectSessionPayService, ProjectSessionPayService>();
             services.AddScoped<IProjectTaskService, ProjectTaskService>();
             services.AddScoped<IProjectCommentService, ProjectCommentService>();
+            services.AddScoped<IProjectServiceService, ProjectServiceService>();
+            services.AddScoped<IProjectServiceHistories, ProjectServiceHistoriesService>();
 
             #endregion
 
@@ -114,6 +116,12 @@ namespace QuanLy.Core
             services.AddScoped<IWebHookPhoneHistoryService, WebHookPhoneHistoryService>();
             services.AddScoped<IWebHookTawkHistoryService, WebHookTawkHistoryService>();
             services.AddScoped<IWebHookPhoneHistoryService, WebHookPhoneHistoryService>();
+            services.AddScoped<IWebHookFormHistoryService, WebHookFormHistoryService>();
+
+            #endregion
+
+            #region NotificationSingle
+            services.AddScoped<INotificationSingle, NotificationSingleService>();
 
             #endregion
 

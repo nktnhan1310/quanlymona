@@ -17,6 +17,7 @@ namespace QuanLy.Entities
         public string PushP256DH { get; set; }
 
         public string PushAuth { get; set; }
+        public string PlayerId { get; set; }
 
     }
 }

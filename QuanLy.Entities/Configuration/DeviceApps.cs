@@ -27,5 +27,7 @@ namespace QuanLy.Entities
         /// </summary>
         public string DeviceType { get; set; }
 
+        public string PlayerId { get; set; }
+
     }
 }

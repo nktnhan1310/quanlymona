@@ -12,5 +12,6 @@ namespace QuanLy.Interface.Services.Catalogue
 {
     public interface IServiceTypes : ICatalogueService<ServiceTypes, BaseSearch>
     {
+        Task<bool> CheckServiceTypeExistProjectService(int id);
     }
 }

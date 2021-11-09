@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using QuanLy.Entities.Newfeed;
+using QuanLy.Interface;
+using QuanLy.Interface.Services;
 using QuanLy.Interface.Services.Newfeed;
 using QuanLy.Model.Newfeed;
 using QuanLy.Model.RequestModel.Newfeed;
@@ -30,12 +32,18 @@ namespace QuanLy.Core.Controllers.Newfeed
     public class PostContentController : BaseController<PostContents, PostContentModel, RequestPostContentModel, BaseSearch>
     {
         protected IConfiguration configuration;
+        protected IUserService userService;
+        protected INotificationSingle notificationSingle;
+        protected IUserInGroupService userInGroupService;
         public PostContentController(IServiceProvider serviceProvider, ILogger<BaseController<PostContents, PostContentModel, RequestPostContentModel, BaseSearch>> logger
             , IConfiguration configuration
             , IWebHostEnvironment env) : base(serviceProvider, logger, env)
         {
             this.domainService = serviceProvider.GetRequiredService<IPostContents>();
+            this.userService = serviceProvider.GetRequiredService<IUserService>();
+            this.userInGroupService = serviceProvider.GetRequiredService<IUserInGroupService>();
             this.configuration = configuration;
+            this.notificationSingle = serviceProvider.GetRequiredService<INotificationSingle>();
         }
 
         /// <summary>
@@ -54,6 +62,8 @@ namespace QuanLy.Core.Controllers.Newfeed
             item.Created = DateTime.UtcNow.AddHours(7);
             item.CreatedBy = LoginContext.Instance.CurrentUser.UserName;
             item.Active = true;
+            var FullName = LoginContext.Instance.CurrentUser.FullName;
+            var UserId = LoginContext.Instance.CurrentUser.UserId;
             if (!string.IsNullOrEmpty(item.PostIMG))
             {
                 List<string> filePaths = new List<string>();
@@ -92,6 +102,14 @@ namespace QuanLy.Core.Controllers.Newfeed
                             System.IO.File.Delete(paths);
                         }
                     }
+
+                    var CheckRoleAdmin = await this.userInGroupService.GetUserInGroupByUserId(UserId);
+                    //Role là admin thì tạo thông báo cho tất cả leader 
+                    if( CheckRoleAdmin != null && CheckRoleAdmin.UserGroupId == 1)
+                    {
+                        var DataLink = "Admin/NewFeed/NewFeed/" + item.Id + "";
+                        await this.notificationSingle.CreateNotifacationForLeader(item.CreatedBy, FullName, DataLink, "Bài đăng mới từ ");
+                    }
                 }
                 else
                 {
@@ -115,8 +133,19 @@ namespace QuanLy.Core.Controllers.Newfeed
             }
             else
             {
-                appDomainResult.ResultCode = (int)HttpStatusCode.OK;
                 success = await this.domainService.CreateAsync(item);
+                if (success)
+                {
+                    appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+                    var CheckRoleAdmin = await this.userInGroupService.GetUserInGroupByUserId(UserId);
+                    //Role là admin thì tạo thông báo cho tất cả leader 
+                    if (CheckRoleAdmin != null && CheckRoleAdmin.UserGroupId == 1)
+                    {
+                        var DataLink = "Admin/NewFeed/NewFeed/" + item.Id + "";
+                        await this.notificationSingle.CreateNotifacationForLeader(item.CreatedBy, FullName, DataLink, "Bài đăng mới từ ");
+                    }
+                }
+                
             }
             appDomainResult.Success = success;
             return appDomainResult;

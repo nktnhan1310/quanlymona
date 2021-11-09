@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuanLy.AppDbContext;
 
 namespace QuanLy.AppDbContext.Migrations
 {
     [DbContext(typeof(MonaDbContext))]
-    partial class MonaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211101072329_MonaDbContext_004")]
+    partial class MonaDbContext_004
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1809,9 +1811,6 @@ namespace QuanLy.AppDbContext.Migrations
                     b.Property<string>("DeviceType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PlayerId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("datetime2");
 
@@ -1846,9 +1845,6 @@ namespace QuanLy.AppDbContext.Migrations
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("PlayerId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PushAuth")
                         .HasColumnType("nvarchar(max)");
