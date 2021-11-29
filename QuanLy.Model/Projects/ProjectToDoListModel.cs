@@ -1,18 +1,14 @@
-﻿using App.Core.Entities.DomainEntity;
+﻿using App.Core.Models.DomainModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace QuanLy.Entities
+namespace QuanLy.Model
 {
-    public class ProjectToDoList : AppCoreDomain
+    public class ProjectToDoListModel : AppCoreDomainModel
     {
-        /// <summary>
-        /// Mã dự án
-        /// </summary>
-        public int? ProjectId { get; set; }
         /// <summary>
         /// Mã task
         /// </summary>
@@ -58,29 +54,7 @@ namespace QuanLy.Entities
         /// </summary>
         public int Priority { get; set; }
 
-        /// <summary>
-        /// Số giờ
-        /// </summary>
-        public int NumberHours { get; set; }
-
-        #region Extension Properties
-
-        /// <summary>
-        /// Tên dự án
-        /// </summary>
         [NotMapped]
-        public string ProjectName { get; set; }
-
-        /// <summary>
-        /// Tên đầy đủ của người nhận việc
-        /// </summary>
-        [NotMapped]
-        public string UserFullName { get; set; }
-
-        [NotMapped]
-        public int? TotalPage { get; set; }
-
-        #endregion
-
+        public int TotalPage { get; set; }
     }
 }

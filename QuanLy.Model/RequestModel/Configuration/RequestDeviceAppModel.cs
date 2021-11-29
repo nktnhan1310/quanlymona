@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuanLy.Model.Configuration
+namespace QuanLy.Model
 {
-    public class DeviceAppModel : AppCoreDomainModel
+    public class RequestDeviceAppModel : RequestCoreModel
     {
         /// <summary>
         /// Mã user
@@ -26,6 +26,7 @@ namespace QuanLy.Model.Configuration
         /// Loại thiết bị
         /// </summary>
         public string DeviceType { get; set; }
+
         public string PlayerId { get; set; }
     }
 }

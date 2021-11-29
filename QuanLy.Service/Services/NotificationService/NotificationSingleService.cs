@@ -2,9 +2,11 @@
 using App.Core.Interface.DbContext;
 using App.Core.Interface.UnitOfWork;
 using App.Core.Service;
+using App.Core.Utilities;
 using AutoMapper;
 using Azure.Core;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using QuanLy.Entities;
@@ -13,6 +15,7 @@ using QuanLy.Interface.Services;
 using QuanLy.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -124,6 +127,93 @@ namespace QuanLy.Service
                     await this.deviceBrowserService.UpdateHide(item);
                 }
             }
+        }
+
+        public async Task<int> NumberNotification(int UserId)
+        {
+            return await this.unitOfWork.Repository<NotificationSingles>().GetQueryable().Where(x => x.UID == UserId && x.Status == 0 && x.Deleted == false).CountAsync();
+        }
+
+        protected override string GetStoreProcName()
+        {
+            return "Mona_sp_Load_NotificationSingle_User_PagingData";
+        }
+
+        protected override SqlParameter[] GetSqlParameters(SearchNotification baseSearch)
+        {
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@UID", baseSearch.UID),
+                new SqlParameter("@PageIndex", baseSearch.PageIndex),
+                new SqlParameter("@PageSize", baseSearch.PageSize),
+                new SqlParameter("@SearchContent", baseSearch.SearchContent),
+                new SqlParameter("@OrderBy", baseSearch.OrderBy),
+                new SqlParameter("@FromDate", baseSearch.FromDate),
+                new SqlParameter("@ToDate", baseSearch.ToDate),
+                new SqlParameter("@Status", baseSearch.Status),
+
+            };
+            return parameters;
+        }
+
+        public override async Task<PagedList<NotificationSingles>> GetPagedListData(SearchNotification baseSearch)
+        {
+            PagedList<NotificationSingles> pagedList = new PagedList<NotificationSingles>();
+            SqlParameter[] parameters = GetSqlParameters(baseSearch);
+            pagedList = await ExcuteQueryPagingAsync(this.GetStoreProcName(), parameters);
+            pagedList.PageIndex = baseSearch.PageIndex;
+            pagedList.PageSize = baseSearch.PageSize;
+            return pagedList;
+        }
+
+        private async Task<PagedList<NotificationSingles>> ExcuteQueryPagingAsync(string commandText, SqlParameter[] sqlParameters)
+        {
+            return await Task.Run(() =>
+            {
+                PagedList<NotificationSingles> pagedList = new PagedList<NotificationSingles>();
+                DataTable dataTable = new DataTable();
+                SqlConnection connection = null;
+                SqlCommand command = null;
+                try
+                {
+                    connection = (SqlConnection)Context.Database.GetDbConnection();
+                    command = connection.CreateCommand();
+                    connection.Open();
+                    command.CommandText = commandText;
+                    command.Parameters.AddRange(sqlParameters);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+                    sqlDataAdapter.Fill(dataTable);
+                    pagedList.Items = MappingDataTable.ConvertToList<NotificationSingles>(dataTable);
+                    if (pagedList.Items.Any())
+                        pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalPage ?? 0;
+                    return pagedList;
+                }
+                finally
+                {
+                    if (connection != null && connection.State == System.Data.ConnectionState.Open)
+                        connection.Close();
+
+                    if (command != null)
+                        command.Dispose();
+                }
+            });
+        }
+
+        public async Task<string> UpdateStaus(int Id,int UID)
+        {
+            string Message = "";
+            var Model = await this.unitOfWork.Repository<NotificationSingles>().GetQueryable().FirstOrDefaultAsync(x => x.Id == Id && x.UID == UID);
+            if (Model != null)
+            {
+                Model.Status = 1;
+                this.unitOfWork.Repository<NotificationSingles>().Update(Model);
+                await this.unitOfWork.SaveAsync();
+            }
+            else
+                Message = "Không dữ liệu thông báo";
+
+            return Message;
         }
     }
 }

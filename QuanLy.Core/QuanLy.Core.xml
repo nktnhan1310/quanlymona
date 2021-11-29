@@ -86,6 +86,13 @@
             <param name="itemModel"></param>
             <returns></returns>
         </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.ServiceTypeController.DeleteItem(System.Int32)">
+            <summary>
+            Xóa item
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:QuanLy.Core.Controllers.ContactCustomerController.GetById(System.Int32)">
             <summary>
             Lấy thông tin theo id
@@ -267,6 +274,18 @@
             <param name="password"></param>
             <returns></returns>
         </member>
+        <member name="M:QuanLy.Core.Controllers.EmailConfigurationController.GetEmailConfiguration">
+            <summary>
+            Lấy thông tin cấu hình email
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.EmailConfigurationController.UpdateEmailConfiguration(App.Core.Models.EmailConfigurationCoreModel)">
+            <summary>
+            Cập nhật cấu hình email
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:QuanLy.Core.Controllers.Newfeed.PostCommentController.GetParentComment(QuanLy.Core.Controllers.Newfeed.PostCommentController.SearchParentPostComment)">
             <summary>
             Lấy danh sách item phân trang Parent Comment của content
@@ -332,6 +351,18 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:QuanLy.Core.Controllers.NotificationSingleController.GetChilComment">
+            <summary>
+            Lấy Số thông báo của User
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.NotificationSingleController.UpdateStatus(System.Int32)">
+            <summary>
+            Cập nhật thông báo User
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:QuanLy.Core.Controllers.Project.ProjectController.AddItem(QuanLy.Model.RequestProjectModel)">
             <summary>
             Thêm mới dự án
@@ -352,6 +383,43 @@
             </summary>
             <param name="phone"></param>
             <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectServiceController.AddItem(QuanLy.Model.RequestProjectServiceModel)">
+            <summary>
+            Thêm mới item
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectServiceController.UpdateItem(QuanLy.Model.RequestProjectServiceModel)">
+            <summary>
+            Cập nhật thông tin
+            </summary>
+            <param name="id"></param>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectServiceHistoriesController.UpdateItem(QuanLy.Model.RequestProjectServiceHistoriesModel)">
+            <summary>
+            Cập nhật thông tin
+            </summary>
+            <param name="id"></param>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectServiceHistoriesController.GetById(System.Int32)">
+            <summary>
+            Lấy thông tin theo id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectServiceHistoriesController.GetList(System.Int32)">
+            <summary>
+            Lấy danh sách thông tin theo ProjectServiceID
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="M:QuanLy.Core.Controllers.Project.ProjectTaskController.GetById(System.Int32)">
@@ -381,6 +449,24 @@
             Xóa task
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectTaskController.GetListDataTask(QuanLy.Entities.SearchProjectTask)">
+            <summary>
+            Load danh sách task cho 1 user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Project.ProjectTaskController.UpdateTaskUser(System.Int32)">
+            <summary>
+            Cập nhật Task của User
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.ProjectToDoListController.AddListToDo(System.Collections.Generic.List{QuanLy.Model.RequestProjectToDoListModel})">
+            <summary>
+            Thêm to do list
+            </summary>
             <returns></returns>
         </member>
         <member name="M:QuanLy.Core.Controllers.Report.Base.BaseReportController`3.GetPagedListReport(`2)">

@@ -24,14 +24,14 @@ namespace QuanLy.Core.Controllers.Project
     [ApiController]
     [Description("Quản lý task của dự án")]
     [Authorize]
-    public class ProjectTaskController : BaseController<ProjectTasks, ProjectTaskModel, RequestProjectTaskModel, BaseSearch>
+    public class ProjectTaskController : BaseController<ProjectTasks, ProjectTaskModel, RequestProjectTaskModel, SearchProjectTask>
     {
         private IProjectService projectService;
         private IProjectUserService projectUserService;
         private IProjectTaskService projectTaskService;
         private IHolidayConfigService holidayConfigService;
 
-        public ProjectTaskController(IServiceProvider serviceProvider, ILogger<BaseController<ProjectTasks, ProjectTaskModel, RequestProjectTaskModel, BaseSearch>> logger, IWebHostEnvironment env) : base(serviceProvider, logger, env)
+        public ProjectTaskController(IServiceProvider serviceProvider, ILogger<BaseController<ProjectTasks, ProjectTaskModel, RequestProjectTaskModel, SearchProjectTask>> logger, IWebHostEnvironment env) : base(serviceProvider, logger, env)
         {
             this.domainService = serviceProvider.GetRequiredService<IProjectTaskService>();
             projectService = serviceProvider.GetRequiredService<IProjectService>();
@@ -83,6 +83,7 @@ namespace QuanLy.Core.Controllers.Project
         public override async Task<AppDomainResult> AddItem([FromBody] RequestProjectTaskModel itemModel)
         {
             AppDomainResult appDomainResult = new AppDomainResult();
+            string Message = "";
             bool success = false;
             if (!ModelState.IsValid) throw new AppException(ModelState.GetErrorMessage());
 
@@ -116,47 +117,67 @@ namespace QuanLy.Core.Controllers.Project
                 itemUpdate.EndTime = itemUpdate.StartTime.Value.AddDays(itemUpdate.WorkDayEffect);
                 // ------------------------- START Tính toán ngày kết thúc của dự án
                 DateTime? dateCheck = null;
+                // TỔNG SỐ NGÀY LÀM
                 int totalDayWork = itemUpdate.WorkDayEffect;
+                // TỔNG SỐ NGÀY NGHỈ
+                int totalDayOff = 0;
                 if (itemUpdate.StartTime.HasValue)
                 {
+                    // NGÀY KIỂM TRA
                     dateCheck = itemUpdate.StartTime.Value;
-                    for (int i = 0; i < totalDayWork; i++)
+                    // NGÀY KẾT THÚC TASK DỰ TÍNH
+                    var workDate = itemUpdate.StartTime.Value.AddDays(itemUpdate.WorkDayEffect - 1);
+                    while (dateCheck.Value.Date <= workDate.Date)
                     {
-                        dateCheck = itemUpdate.StartTime.Value.AddDays(i);
                         var holidayConfig = await this.holidayConfigService.GetSingleAsync(e => !e.Deleted && e.Active
                             && e.FromDate.HasValue && e.FromDate.Value.Date <= dateCheck.Value.Date
                             && e.ToDate.HasValue && e.ToDate.Value.Date >= dateCheck.Value.Date
                             );
-                        // Nếu là T7 hoặc CN => + thêm 1 ngày
-                        if (dateCheck.Value.Date.DayOfWeek == DayOfWeek.Saturday || dateCheck.Value.Date.DayOfWeek == DayOfWeek.Sunday)
+
+                        if (holidayConfig != null)
                         {
-                            totalDayWork += 1;
+                            // TỔNG SỐ NGÀY OFF TRONG KÌ NGHỈ ĐƯỢC CẤU HÌNH
+                            var totalHolidayConfigOff = (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
+                            totalDayOff += totalHolidayConfigOff;
+                            workDate = workDate.AddDays(totalHolidayConfigOff);
+                            dateCheck = dateCheck.Value.AddDays(totalHolidayConfigOff);
                             continue;
                         }
-                        if (holidayConfig == null) continue;
-                        i += (holidayConfig.ToDate.Value - holidayConfig.ToDate.Value).Days + 1;
-                        totalDayWork += 1;
+                        else
+                        {
+                            if (dateCheck.Value.Date.DayOfWeek == DayOfWeek.Saturday || dateCheck.Value.Date.DayOfWeek == DayOfWeek.Sunday)
+                            {
+                                workDate = workDate.AddDays(1);
+                                totalDayOff++;
+                            }
+                        }
+                        dateCheck = dateCheck.Value.AddDays(1);
                     }
-                    itemUpdate.EndTime = itemUpdate.StartTime.Value.AddDays(totalDayWork - 1);
+                    itemUpdate.EndTime = itemUpdate.StartTime.Value.AddDays(totalDayWork + totalDayOff - 1);
 
                 }
                 // ------------------------- END Tính toán ngày kết thúc của dự án
 
 
             }
-            success &= await this.domainService.CreateAsync(itemUpdate);
-            if (success)
+            Message = await this.domainService.GetExistItemMessage(itemUpdate);
+            if (string.IsNullOrEmpty(Message))
             {
-                // Tạo thông báo cho user
+                success = await this.domainService.CreateAsync(itemUpdate);
+                if (success)
+                {
+                    // Tạo thông báo cho user
 
 
-                // PUSH NOTIDESKTOP
+                    // PUSH NOTIDESKTOP
 
 
-                appDomainResult.Success = success;
-                appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+                    appDomainResult.Success = success;
+                    appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+                }
+                else throw new Exception("Lỗi trong quá trình xử lý");
             }
-            else throw new Exception("Lỗi trong quá trình xử lý");
+            else throw new Exception(Message);
 
             return appDomainResult;
         }
@@ -173,6 +194,7 @@ namespace QuanLy.Core.Controllers.Project
         {
             AppDomainResult appDomainResult = new AppDomainResult();
             bool success = false;
+            string Message = "";
             if (!ModelState.IsValid) throw new AppException(ModelState.GetErrorMessage());
 
             var itemUpdate = mapper.Map<ProjectTasks>(itemModel);
@@ -192,6 +214,7 @@ namespace QuanLy.Core.Controllers.Project
                 var latestTasks = await this.domainService.GetAsync(e => !e.Deleted && e.Active
                 && e.ProjectId == itemUpdate.ProjectId
                 && e.TaskEffect
+                && e.Id != itemUpdate.Id
                 && e.TaskIndex < itemUpdate.TaskIndex
                 );
                 if (latestTasks != null && latestTasks.Any())
@@ -205,43 +228,64 @@ namespace QuanLy.Core.Controllers.Project
                 itemUpdate.EndTime = itemUpdate.StartTime.Value.AddDays(itemUpdate.WorkDayEffect);
                 // ------------------------- START Tính toán ngày kết thúc của dự án
                 DateTime? dateCheck = null;
+                // TỔNG SỐ NGÀY LÀM
                 int totalDayWork = itemUpdate.WorkDayEffect;
+                // TỔNG SỐ NGÀY NGHỈ
+                int totalDayOff = 0;
                 if (itemUpdate.StartTime.HasValue)
                 {
+                    // NGÀY KIỂM TRA
                     dateCheck = itemUpdate.StartTime.Value;
-                    for (int i = 0; i < totalDayWork; i++)
+                    // NGÀY KẾT THÚC TASK DỰ TÍNH
+                    var workDate = itemUpdate.StartTime.Value.AddDays(itemUpdate.WorkDayEffect - 1);
+                    while (dateCheck.Value.Date <= workDate.Date)
                     {
-                        dateCheck = itemUpdate.StartTime.Value.AddDays(i);
                         var holidayConfig = await this.holidayConfigService.GetSingleAsync(e => !e.Deleted && e.Active
                             && e.FromDate.HasValue && e.FromDate.Value.Date <= dateCheck.Value.Date
                             && e.ToDate.HasValue && e.ToDate.Value.Date >= dateCheck.Value.Date
                             );
-                        // Nếu là T7 hoặc CN => + thêm 1 ngày
-                        if (dateCheck.Value.Date.DayOfWeek == DayOfWeek.Saturday || dateCheck.Value.Date.DayOfWeek == DayOfWeek.Sunday)
+
+                        if (holidayConfig != null)
                         {
-                            totalDayWork += 1;
+                            // TỔNG SỐ NGÀY OFF TRONG KÌ NGHỈ ĐƯỢC CẤU HÌNH
+                            var totalHolidayConfigOff = (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
+                            totalDayOff += totalHolidayConfigOff;
+                            workDate = workDate.AddDays(totalHolidayConfigOff);
+                            dateCheck = dateCheck.Value.AddDays(totalHolidayConfigOff);
                             continue;
                         }
-                        if (holidayConfig == null) continue;
-                        i += (holidayConfig.ToDate.Value - holidayConfig.ToDate.Value).Days + 1;
-                        totalDayWork += 1;
+                        else
+                        {
+                            if (dateCheck.Value.Date.DayOfWeek == DayOfWeek.Saturday || dateCheck.Value.Date.DayOfWeek == DayOfWeek.Sunday)
+                            {
+                                workDate = workDate.AddDays(1);
+                                totalDayOff++;
+                            }
+                        }
+                        dateCheck = dateCheck.Value.AddDays(1);
                     }
-                    itemUpdate.EndTime = itemUpdate.StartTime.Value.AddDays(totalDayWork - 1);
+                    itemUpdate.EndTime = itemUpdate.StartTime.Value.AddDays(totalDayWork + totalDayOff - 1);
 
                 }
                 // ------------------------- END Tính toán ngày kết thúc của dự án
 
             }
-            success &= await this.domainService.UpdateAsync(itemUpdate);
-            if (success)
+
+            Message = await this.domainService.GetExistItemMessage(itemUpdate);
+            if (string.IsNullOrEmpty(Message))
             {
-                // PUSH NOTIDESKTOP
+                success = await this.domainService.UpdateAsync(itemUpdate);
+                if (success)
+                {
+                    // PUSH NOTIDESKTOP
 
 
-                appDomainResult.Success = success;
-                appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+                    appDomainResult.Success = success;
+                    appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+                }
+                else throw new Exception("Lỗi trong quá trình xử lý");
             }
-            else throw new Exception("Lỗi trong quá trình xử lý");
+            else throw new Exception(Message);
 
             return appDomainResult;
         }
@@ -266,12 +310,67 @@ namespace QuanLy.Core.Controllers.Project
                 existTask.Updated = DateTime.UtcNow.AddHours(7);
                 existTask.UpdatedBy = LoginContext.Instance.CurrentUser.UserName;
                 // Cập nhật lại những task sau đó
-                await this.projectTaskService.UpdateTaskEffect(existTask, true);
+                await this.projectTaskService.UpdateTaskEffect(existTask, true,true);
                 appDomainResult.ResultCode = (int)HttpStatusCode.OK;
                 appDomainResult.Success = success;
             }
             else
                 throw new Exception("Lỗi trong quá trình xử lý");
+
+            return appDomainResult;
+        }
+
+
+        /// <summary>
+        /// Load danh sách task cho 1 user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get-list-task-user")]
+        [AppAuthorize(new string[] { CoreContants.ViewAll })]
+        public async Task<AppDomainResult> GetListDataTask([FromQuery] SearchProjectTask searchProjectTask)
+        {
+            AppDomainResult appDomainResult = new AppDomainResult();
+            if (ModelState.IsValid)
+            {
+                var UserId = LoginContext.Instance.CurrentUser.UserId;
+                PagedList<ProjectTasks> pagedData = await this.projectTaskService.GetPagedListTaskUser(UserId,searchProjectTask);
+                PagedList<ProjectTaskModel> pagedDataModel = mapper.Map<PagedList<ProjectTaskModel>>(pagedData);
+                appDomainResult = new AppDomainResult
+                {
+                    Data = pagedDataModel,
+                    Success = true,
+                    ResultCode = (int)HttpStatusCode.OK
+                };
+            }
+            else
+                throw new AppException(ModelState.GetErrorMessage());
+
+            return appDomainResult;
+        }
+
+        /// <summary>
+        /// Cập nhật Task của User
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("update-task-user")]
+        [AppAuthorize(new string[] { CoreContants.ViewAll })]
+        public async Task<AppDomainResult> UpdateTaskUser([FromQuery] int TaskId)
+        {
+            var Message = "";
+            AppDomainResult appDomainResult = new AppDomainResult();
+            if (ModelState.IsValid)
+            {
+                var UserId = LoginContext.Instance.CurrentUser.UserId;
+                Message = await this.projectUserService.UpdateStatusTaskOfUser(UserId, TaskId);
+                if (string.IsNullOrEmpty(Message))
+                {
+                    appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+                    appDomainResult.Success = true;
+                }
+                else throw new AppException(Message);
+            }
+            else
+                throw new AppException(ModelState.GetErrorMessage());
 
             return appDomainResult;
         }

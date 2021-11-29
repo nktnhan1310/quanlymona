@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuanLy.Model.Configuration
+namespace QuanLy.Model
 {
-    public class DeviceBrowserModel : AppCoreDomainModel
+    public class RequestDeviceBrowserModel : RequestCoreModel
     {
         /// <summary>
         /// Mã user
@@ -17,7 +17,6 @@ namespace QuanLy.Model.Configuration
         public string PushP256DH { get; set; }
 
         public string PushAuth { get; set; }
-
         public string PlayerId { get; set; }
     }
 }

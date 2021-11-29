@@ -37,5 +37,30 @@ namespace QuanLy.Service
             return result;
         }
 
+        public async Task<string> UpdateStatusTaskOfUser(int UserId, int TaskId)
+        {
+            string message = "";
+            var GetData = await this.unitOfWork.Repository<ProjectUsers>().GetQueryable().FirstOrDefaultAsync(
+                x => x.TaskId == TaskId
+                && x.UserId == UserId);
+            var GetDatatask = await this.unitOfWork.Repository<ProjectTasks>().GetQueryable().FirstOrDefaultAsync(
+                x => x.Id == TaskId);
+            if (GetData == null)
+                message = "Không có dữ liệu của task";
+            else if(GetDatatask == null)
+                message = "Không có dữ liệu của task";
+            else if(GetDatatask.StatusDay == 1)
+                message = "Task đã hoàn thành, không được cập nhật nữa";
+            else
+            {
+                GetDatatask.StatusDay = 1;
+                GetDatatask.IsDone = true;
+                GetDatatask.UpdatedBy = LoginContext.Instance.CurrentUser.UserName;
+                GetDatatask.Updated = DateTime.UtcNow.AddHours(7);
+                this.unitOfWork.Repository<ProjectTasks>().Update(GetDatatask);
+                await this.unitOfWork.SaveAsync();
+            }
+            return message;
+        }
     }
 }

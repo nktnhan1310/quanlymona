@@ -113,7 +113,7 @@ namespace QuanLy.Core.Controllers.Project
                 if (startDate.HasValue && dateCheck.HasValue)
                 {
                     totalDayResult = Convert.ToInt32((dateCheck.Value - startDate.Value).TotalDays);
-
+                    int totalDayAdd = 0;
                     // Kiểm tra có ngày nghỉ hoặc t7/cn thì + thêm 1 ngày
                     for (int i = 0; i < totalDayResult; i++)
                     {
@@ -124,16 +124,16 @@ namespace QuanLy.Core.Controllers.Project
                         );
                         if (holidayConfig != null)
                         {
-                            totalDayResult += (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
+                            totalDayAdd += (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
                             i += (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
                         }
                         else
                         {
                             if (dateCheck.Value.Date.DayOfWeek == DayOfWeek.Saturday || dateCheck.Value.Date.DayOfWeek == DayOfWeek.Sunday)
-                                totalDayResult++;
+                                totalDayAdd++;
                         }
                     }
-                    endDate = startDate.Value.AddDays(totalDayResult);
+                    endDate = startDate.Value.AddDays(totalDayAdd);
                     //while (startDate.Value <= dateCheck.Value)
                     //{
                     //    var hospitalConfig = await this.holidayConfigService.GetSingleAsync(e => !e.Deleted && e.Active
@@ -193,9 +193,10 @@ namespace QuanLy.Core.Controllers.Project
                 //----------------------- XỬ LÝ FILE TRÊN DRIVE
                 //.............................................
                 //.............................................
-                success &= await this.domainService.CreateAsync(itemUpdate);
 
             }
+            success = await this.domainService.CreateAsync(itemUpdate);
+
             if (success)
             {
                 // Kiểm tra thông tin khách

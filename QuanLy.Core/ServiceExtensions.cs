@@ -125,6 +125,10 @@ namespace QuanLy.Core
 
             #endregion
 
+            #region ProjectToDoList
+            services.AddScoped<IProjectToDoList, ProjectToDoListService>();
+            #endregion
+
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Quan Ly API", Version = "v1" });

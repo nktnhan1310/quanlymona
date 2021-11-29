@@ -98,6 +98,10 @@ namespace QuanLy.Model
         /// </summary>
         public List<int> UserIds { get; set; }
 
+        /// <summary>
+        /// Số ngày task gần đến hạn
+        /// </summary>
+        public int? NumberOverDue { get; set; }
         #endregion
     }
 }
