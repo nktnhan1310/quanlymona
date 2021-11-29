@@ -1,4 +1,5 @@
 ﻿using App.Core.Models.DomainModel;
+using QuanLy.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,12 +35,12 @@ namespace QuanLy.Model
         /// <summary>
         /// Ngày bắt đầu
         /// </summary>
-        [Required(ErrorMessage = "Vui lòng chọn ngày bắt đầu")]
+        //[Required(ErrorMessage = "Vui lòng chọn ngày bắt đầu")]
         public DateTime? StartTime { get; set; }
         /// <summary>
         /// Ngày kết thúc
         /// </summary>
-        [Required(ErrorMessage = "Vui lòng chọn ngày kết thúc")]
+        //[Required(ErrorMessage = "Vui lòng chọn ngày kết thúc")]
         public DateTime? EndTime { get; set; }
 
         /// <summary>
@@ -90,6 +91,8 @@ namespace QuanLy.Model
         #region Extension Properties
 
         public List<int> UserIds { get; set; }
+
+        public List<RequestProjectToDoListModel> ProjectToDoLists { get; set; }
 
         #endregion
 

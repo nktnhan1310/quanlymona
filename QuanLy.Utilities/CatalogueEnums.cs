@@ -205,13 +205,20 @@ namespace QuanLy.Utilities
         public enum ProjectUserType
         {
             /// <summary>
-            /// Nhân lực dự án
+            /// Khách hàng
             /// </summary>
             Staff = 0,
             /// <summary>
-            /// Khách hàng
+            /// Nhân lực dự án
             /// </summary>
             User = 1
+        }
+
+        public enum ToDoListPriority
+        {
+            UuTien = 0,
+            TrungBinh = 1,
+            Thap = 2
         }
     }
 }

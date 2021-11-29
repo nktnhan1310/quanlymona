@@ -20,7 +20,9 @@ namespace QuanLy.Entities
         /// <summary>
         /// 0 chưa xem , 1 đã xem
         /// </summary>
-        public int Status { get; set; }
+        public int? Status { get; set; }
+
+        public int UID { get; set; }
 
     }
 }

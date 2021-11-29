@@ -10,7 +10,7 @@ namespace QuanLy.Interface
     public interface INotificationSingle : IDomainService<NotificationSingles, SearchNotification>
     {
         /// <summary>
-        /// 
+        /// Tạo thông báo
         /// </summary>
         /// <param name="NotificationId"></param>
         /// <param name="title"></param>
@@ -31,7 +31,7 @@ namespace QuanLy.Interface
         Task CreateNotifacationForLeader(string UserName, string fullName, string DataLink, string Content);
 
         /// <summary>
-        /// 
+        /// Tạo thông báo khi User bình luận trên bài viết
         /// </summary>
         /// <param name="UserName">Người comment</param>
         /// <param name="fullName">Full Người Comment </param>
@@ -42,7 +42,7 @@ namespace QuanLy.Interface
 
 
         /// <summary>
-        /// 
+        /// Tạo thông báo khi User bình luận trên 1 bình luận khác
         /// </summary>
         /// <param name="UserName"></param>
         /// <param name="fullName"></param>
@@ -51,6 +51,21 @@ namespace QuanLy.Interface
         /// <param name="UserPostCommentID"></param>
         /// <returns></returns>
         Task CreateNotificationfeedbackComment(string UserName, string fullName, string DataLink, string Content, int UserPostCommentID);
+
+
+        /// <summary>
+        /// Số thông báo của User
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        Task<int> NumberNotification(int UserId);
+
+        /// <summary>
+        /// Cập nhật trạng thái thông báo
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        Task<string> UpdateStaus(int Id, int UID);
 
 
     }

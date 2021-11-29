@@ -7,7 +7,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>D:\Du an Mona\QuanLyMona\quanlymona\QuanLy.Core\QuanLy.Core.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
-    <OutputPath></OutputPath>
+    <OutputPath>E:\MonaMedia\QuanLyCoreGit\Libs\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -62,43 +62,43 @@
 
   <ItemGroup>
     <Reference Include="App.Core">
-      <HintPath>..\..\AppCore\appcore\App.Core\bin\netcoreapp3.1\App.Core.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\App.Core.dll</HintPath>
     </Reference>
     <Reference Include="App.Core.Entities">
-      <HintPath>..\..\AppCore\appcore\App.Core.Entities\bin\netcoreapp3.1\App.Core.Entities.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\App.Core.Entities.dll</HintPath>
     </Reference>
     <Reference Include="App.Core.Extensions">
-      <HintPath>..\..\AppCore\appcore\App.Core.Extensions\bin\netcoreapp3.1\App.Core.Extensions.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\App.Core.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="App.Core.Interface">
-      <HintPath>..\..\AppCore\appcore\App.Core.Interface\bin\netcoreapp3.1\App.Core.Interface.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\App.Core.Interface.dll</HintPath>
     </Reference>
     <Reference Include="App.Core.Models">
-      <HintPath>..\..\AppCore\appcore\App.Core.Models\bin\netcoreapp3.1\App.Core.Models.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\App.Core.Models.dll</HintPath>
     </Reference>
     <Reference Include="App.Core.Service">
-      <HintPath>..\..\AppCore\appcore\App.Core.Service\bin\netcoreapp3.1\App.Core.Service.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\App.Core.Service.dll</HintPath>
     </Reference>
     <Reference Include="App.Core.Utilities">
-      <HintPath>..\..\AppCore\appcore\App.Core.Utilities\bin\netcoreapp3.1\App.Core.Utilities.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\App.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="QuanLy.AppDbContext">
-      <HintPath>..\QuanLy.AppDbContext\bin\netcoreapp3.1\QuanLy.AppDbContext.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\QuanLy.AppDbContext.dll</HintPath>
     </Reference>
     <Reference Include="QuanLy.Entities">
-      <HintPath>..\QuanLy.Entities\bin\netcoreapp3.1\QuanLy.Entities.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\QuanLy.Entities.dll</HintPath>
     </Reference>
     <Reference Include="QuanLy.Interface">
-      <HintPath>..\QuanLy.Interface\bin\netcoreapp3.1\QuanLy.Interface.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\QuanLy.Interface.dll</HintPath>
     </Reference>
     <Reference Include="QuanLy.Model">
-      <HintPath>..\QuanLy.Model\bin\netcoreapp3.1\QuanLy.Model.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\QuanLy.Model.dll</HintPath>
     </Reference>
     <Reference Include="QuanLy.Service">
-      <HintPath>..\QuanLy.Service\bin\netcoreapp3.1\QuanLy.Service.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\QuanLy.Service.dll</HintPath>
     </Reference>
     <Reference Include="QuanLy.Utilities">
-      <HintPath>..\QuanLy.Utilities\bin\netcoreapp3.1\QuanLy.Utilities.dll</HintPath>
+      <HintPath>$(SolutionDir)\Libs\netcoreapp3.1\QuanLy.Utilities.dll</HintPath>
     </Reference>
   </ItemGroup>
 

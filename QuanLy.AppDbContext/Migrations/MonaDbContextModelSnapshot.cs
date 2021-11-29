@@ -2600,6 +2600,12 @@ namespace QuanLy.AppDbContext.Migrations
                     b.Property<DateTime?>("FromTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("NumberHours")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 

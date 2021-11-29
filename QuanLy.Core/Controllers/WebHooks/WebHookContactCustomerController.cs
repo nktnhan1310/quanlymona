@@ -1085,6 +1085,12 @@ namespace QuanLy.Core.Controllers.WebHooks
             return Ok(result);
         }
 
+        [HttpPost("Displayed")]
+        public IActionResult CreateDisplayed (WebHookDisplayedRequestModel model)
+        {
+            return Ok("thanhCong");
+        }
+
         //[HttpPost("send-one-signal-2")]
         //public async Task<IActionResult> CreateNotification2(string title, string content, List<string> External)
         //{

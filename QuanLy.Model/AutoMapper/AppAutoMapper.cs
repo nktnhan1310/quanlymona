@@ -175,6 +175,34 @@ namespace QuanLy.Model
             CreateMap<EmailConfigurationCoreModel, EmailConfigurationCores>().ReverseMap();
             #endregion
 
+            #region NotificationSingle
+            CreateMap<NotificationSingleModel, NotificationSingles>().ReverseMap();
+            CreateMap<PagedList<NotificationSingleModel>, PagedList<NotificationSingles>>().ReverseMap();
+            #endregion
+
+            #region ProjectToList
+            CreateMap<ProjectToDoListModel, ProjectToDoList>().ReverseMap();
+            CreateMap<RequestProjectToDoListModel, ProjectToDoList>().ReverseMap();
+            CreateMap<PagedList<ProjectToDoListModel>, PagedList<ProjectToDoList>>().ReverseMap();
+            CreateMap<List<ProjectToDoListModel>, List<ProjectToDoList>>().ReverseMap();
+            #endregion
+
+            #region ProjectTask
+            CreateMap<ProjectTaskModel, ProjectTasks>().ReverseMap();
+            CreateMap<RequestProjectTaskModel, ProjectTasks>().ReverseMap();
+            CreateMap<PagedList<ProjectTaskModel>, PagedList<ProjectTasks>>().ReverseMap();
+            #endregion
+
+
+            #region DeviceApp
+            CreateMap<DeviceAppModel, DeviceApps>().ReverseMap();
+            CreateMap<RequestDeviceAppModel, DeviceApps>().ReverseMap();
+            #endregion
+
+            #region DevBrowser
+            CreateMap<DeviceBrowserModel, DeviceBrowsers>().ReverseMap();
+            CreateMap<RequestDeviceBrowserModel, DeviceBrowsers>().ReverseMap();
+            #endregion
 
         }
     }

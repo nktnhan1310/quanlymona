@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLy.Utilities", "QuanLy.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLy.Test", "QuanLy.Test\QuanLy.Test.csproj", "{EAA53069-A4DD-4E27-A952-5C33B2B36C02}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core", "..\AppCore\appcore\App.Core\App.Core.csproj", "{64532F46-962B-4F37-8E45-850F9FF3B3C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Core", "..\AppCoreGit\App.Core\App.Core.csproj", "{5C28F446-8E68-4066-980A-7C8444FC60CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +59,10 @@ Global
 		{EAA53069-A4DD-4E27-A952-5C33B2B36C02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAA53069-A4DD-4E27-A952-5C33B2B36C02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAA53069-A4DD-4E27-A952-5C33B2B36C02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64532F46-962B-4F37-8E45-850F9FF3B3C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64532F46-962B-4F37-8E45-850F9FF3B3C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64532F46-962B-4F37-8E45-850F9FF3B3C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64532F46-962B-4F37-8E45-850F9FF3B3C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C28F446-8E68-4066-980A-7C8444FC60CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C28F446-8E68-4066-980A-7C8444FC60CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C28F446-8E68-4066-980A-7C8444FC60CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C28F446-8E68-4066-980A-7C8444FC60CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

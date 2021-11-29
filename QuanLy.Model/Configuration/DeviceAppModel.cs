@@ -26,5 +26,6 @@ namespace QuanLy.Model.Configuration
         /// Loại thiết bị
         /// </summary>
         public string DeviceType { get; set; }
+        public string PlayerId { get; set; }
     }
 }

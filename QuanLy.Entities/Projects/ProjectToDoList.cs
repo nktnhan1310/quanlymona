@@ -53,6 +53,16 @@ namespace QuanLy.Entities
         /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Độ ưu tiên
+        /// </summary>
+        public int Priority { get; set; }
+
+        /// <summary>
+        /// Số giờ
+        /// </summary>
+        public int NumberHours { get; set; }
+
         #region Extension Properties
 
         /// <summary>
@@ -66,6 +76,9 @@ namespace QuanLy.Entities
         /// </summary>
         [NotMapped]
         public string UserFullName { get; set; }
+
+        [NotMapped]
+        public int? TotalPage { get; set; }
 
         #endregion
 
