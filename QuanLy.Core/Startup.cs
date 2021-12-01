@@ -40,6 +40,7 @@ namespace QuanLy.Core
     {
         public IConfiguration Configuration { get; }
         public ProjectServiceService projectServiceService { get; }
+        public ProjectTaskService ProjectTaskService { get; }
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -239,6 +240,7 @@ namespace QuanLy.Core
             app.UseAuthorization();
             app.UseHangfireDashboard("/mydashboard");
             RecurringJob.AddOrUpdate<ProjectServiceService>(x => x.UpdateServiceExprireDate(), Cron.Daily);
+            RecurringJob.AddOrUpdate<ProjectTaskService>(x => x.JobProjectTask(), Cron.Daily);
             //using (var connection = JobStorage.Current.GetConnection())
             //{
             //    foreach (var recurringJob in connection.GetRecurringJobs())

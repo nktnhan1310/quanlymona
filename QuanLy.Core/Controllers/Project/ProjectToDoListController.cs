@@ -49,7 +49,13 @@ namespace QuanLy.Core.Controllers
             {
                 success = true;
                 appDomainResult.ResultCode = (int)HttpStatusCode.OK;
-                await this.domainService.CreateAsync(itemUpdate);
+                foreach(var item in itemUpdate)
+                {
+                    item.Created = DateTime.UtcNow.AddHours(7);
+                    item.CreatedBy = User;
+                    await this.domainService.CreateAsync(item);
+                }
+                
             }
             else
                 throw new KeyNotFoundException(Message);

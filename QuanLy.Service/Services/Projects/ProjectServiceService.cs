@@ -132,7 +132,7 @@ namespace QuanLy.Service
             }
             entity.DatePush = DateTime.Now;
             entity.Updated = DateTime.Now;
-            entity.UpdatedBy = "Auto";
+            entity.UpdatedBy = Contants.UPDATE_BY_SEVER;
             this.unitOfWork.Repository<ProjectServices>().Update(entity);
             await this.unitOfWork.SaveAsync();
         }
@@ -151,7 +151,7 @@ namespace QuanLy.Service
                     //Tạo thông báo và Onesignal leader
                     foreach (var leader in DataLeader)
                     {
-                        var DataNotification = await this.notificationSingle.CreateNotification(0, "Thông báo gia hạn", "Dự án [" + item.ProjectName + "] đang dùng dịch vụ [" + item.ServiceName + "] sẽ hết hạn vào ngày [" + item.EndDate.Value.ToString("dd/MM/yyyy") + "] <a class=\"detail\" href=\"/Admin/Services/ServiceList?search=" + item.ProjectName + "\">xem tại đây</a>", leader.Id, 1, "server");
+                        var DataNotification = await this.notificationSingle.CreateNotification(0, "Thông báo gia hạn dịch vụ", $"/Admin/Services/ServiceList?search= { item.ProjectId}", leader.Id, 1, Contants.UPDATE_BY_SEVER);
                         await _hubContext.Clients.All.SendAsync(Contants.SR_NOTIFICATION, DataNotification);
                         if(leader.dataPlayerIds != null)
                         {

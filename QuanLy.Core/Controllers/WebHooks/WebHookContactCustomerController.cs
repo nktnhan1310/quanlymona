@@ -42,6 +42,7 @@ namespace QuanLy.Core.Controllers.WebHooks
         protected IWebHookPhoneHistoryService webHookPhoneHistoryService;
         protected IContactCustomerMappingUserService contactCustomerMappingUserService;
         protected IProjectServiceService projectServiceService;
+        protected IProjectTaskService projectTaskService;
 
 
         protected IConfiguration configuration;
@@ -64,7 +65,7 @@ namespace QuanLy.Core.Controllers.WebHooks
             webHookTawkHistoryService = serviceProvider.GetRequiredService<IWebHookTawkHistoryService>();
             contactCustomerMappingUserService = serviceProvider.GetRequiredService<IContactCustomerMappingUserService>();
             projectServiceService = serviceProvider.GetRequiredService<IProjectServiceService>();
-
+            projectTaskService = serviceProvider.GetRequiredService<IProjectTaskService>();
             this.mapper = mapper;
             this.hubContext = hubContext;
 
@@ -1086,8 +1087,9 @@ namespace QuanLy.Core.Controllers.WebHooks
         }
 
         [HttpPost("Displayed")]
-        public IActionResult CreateDisplayed (WebHookDisplayedRequestModel model)
+        public async Task <IActionResult> CreateDisplayed (WebHookDisplayedRequestModel model)
         {
+            await projectTaskService.JobProjectTask();
             return Ok("thanhCong");
         }
 

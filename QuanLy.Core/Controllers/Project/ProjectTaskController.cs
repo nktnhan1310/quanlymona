@@ -108,7 +108,7 @@ namespace QuanLy.Core.Controllers.Project
                 );
                 if (latestTasks != null && latestTasks.Any())
                 {
-                    var latestTask = latestTasks.OrderByDescending(e => e.TaskIndex).FirstOrDefault();
+                    var latestTask = latestTasks.OrderByDescending(e => e.TaskIndex).ThenByDescending(e => e.EndTime).FirstOrDefault();
                     if (latestTask != null && latestTask.EndTime.HasValue)
                         itemUpdate.StartTime = latestTask.EndTime.Value.AddDays(1);
                 }
@@ -219,7 +219,7 @@ namespace QuanLy.Core.Controllers.Project
                 );
                 if (latestTasks != null && latestTasks.Any())
                 {
-                    var latestTask = latestTasks.OrderByDescending(e => e.TaskIndex).FirstOrDefault();
+                    var latestTask = latestTasks.OrderByDescending(e => e.TaskIndex).ThenByDescending(e=> e.EndTime).FirstOrDefault();
                     if (latestTask != null && latestTask.EndTime.HasValue)
                         itemUpdate.StartTime = latestTask.EndTime.Value.AddDays(1);
                 }
@@ -352,7 +352,7 @@ namespace QuanLy.Core.Controllers.Project
         /// Cập nhật Task của User
         /// </summary>
         /// <returns></returns>
-        [HttpGet("update-task-user")]
+        [HttpPost("update-task-user")]
         [AppAuthorize(new string[] { CoreContants.ViewAll })]
         public async Task<AppDomainResult> UpdateTaskUser([FromQuery] int TaskId)
         {
@@ -362,6 +362,28 @@ namespace QuanLy.Core.Controllers.Project
             {
                 var UserId = LoginContext.Instance.CurrentUser.UserId;
                 Message = await this.projectUserService.UpdateStatusTaskOfUser(UserId, TaskId);
+                if (string.IsNullOrEmpty(Message))
+                {
+                    appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+                    appDomainResult.Success = true;
+                }
+                else throw new AppException(Message);
+            }
+            else
+                throw new AppException(ModelState.GetErrorMessage());
+
+            return appDomainResult;
+        }
+
+        [HttpPost("update-task-infinity")]
+        [AppAuthorize(new string[] { CoreContants.ViewAll })]
+        public async Task<AppDomainResult> UpdateTaskInfinity([FromQuery] int TaskId,bool Infinity)
+        {
+            var Message = "";
+            AppDomainResult appDomainResult = new AppDomainResult();
+            if (ModelState.IsValid)
+            {
+                Message = await this.projectTaskService.UpdateTaskInfinity(TaskId,Infinity);
                 if (string.IsNullOrEmpty(Message))
                 {
                     appDomainResult.ResultCode = (int)HttpStatusCode.OK;

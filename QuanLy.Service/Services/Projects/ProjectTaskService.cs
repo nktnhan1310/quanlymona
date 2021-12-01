@@ -145,6 +145,7 @@ namespace QuanLy.Service
         /// <returns></returns>
         public override async Task<bool> UpdateAsync(ProjectTasks item)
         {
+            List<int> ListUserCreate = new List<int>();
             if (item == null) throw new AppException("Không tìm thấy task");
             var AppId = Guid.Parse(configuration.GetSection("OneSignal:AppId").Value.ToString());
             var AppSecret = configuration.GetSection("OneSignal:AppSecret").Value.ToString();
@@ -180,21 +181,31 @@ namespace QuanLy.Service
                         var notExistUserTasks = existUserTasks.Where(x => !item.UserIds.Contains(x.UserId ?? 0)).ToList();
                         if (notExistUserTasks != null && notExistUserTasks.Any())
                         {
-
+                            var todoListUsers = new List<ProjectToDoList>();
                             foreach (var notExistUserTask in notExistUserTasks)
                             {
                                 //Xóa User không được chọn vào task
                                 this.unitOfWork.Repository<ProjectUsers>().Delete(notExistUserTask);
+                                var todoLists = await this.unitOfWork.Repository<ProjectToDoList>().GetQueryable()
+                                    .Where(e => e.TaskId == notExistUserTask.TaskId && e.UserId == notExistUserTask.UserId)
+                                    .ToListAsync();
+                                if (todoLists != null && todoLists.Any())
+                                {
+                                    todoListUsers.AddRange(todoLists);
+                                }
                             }
                             // LẤY RA DANH SÁCH TODOLIST CỦA TASKS
-                            var ToDoListUsers = await this.unitOfWork.Repository<ProjectToDoList>().GetQueryable()
-                                    .Where(e => !e.Deleted && e.Active
-                                    && notExistUserTasks.Any(x => x.TaskId == e.TaskId && x.UserId == e.UserId)
-                                    ).ToListAsync();
-                            foreach (var ToDoListUser in ToDoListUsers)
+                            //var ToDoListUsers = await this.unitOfWork.Repository<ProjectToDoList>().GetQueryable()
+                            //        .Where(e => !e.Deleted && e.Active
+                            //        && notExistUserTasks.Any(x => x.TaskId == e.TaskId && x.UserId == e.UserId)
+                            //        ).ToListAsync();
+                            if (todoListUsers != null && todoListUsers.Any())
                             {
-                                // Xóa tất cả To Do List của User Trong task
-                                this.unitOfWork.Repository<ProjectToDoList>().Delete(ToDoListUser);
+                                foreach (var ToDoListUser in todoListUsers)
+                                {
+                                    // Xóa tất cả To Do List của User Trong task
+                                    this.unitOfWork.Repository<ProjectToDoList>().Delete(ToDoListUser);
+                                }
                             }
                         }
 
@@ -207,6 +218,7 @@ namespace QuanLy.Service
                                 && e.UserId == userId);
                             if (existUserTask == false)
                             {
+                                ListUserCreate.Add(userId);
                                 bool isCustomer = await this.userCoreService.IsInUserGroup(userId, Contants.USER_GROUP_CUSTOMER);
                                 ProjectUsers projectUsers = new ProjectUsers()
                                 {
@@ -277,7 +289,7 @@ namespace QuanLy.Service
                     await contextTransaction.CommitAsync();
                     // THÔNG BÁO ONESIGNAL
                     var ListPlayerIds = await this.unitOfWork.Repository<DeviceBrowsers>().GetQueryable()
-                        .Where(x => item.UserIds.Contains(x.UserId.Value))
+                        .Where(x => ListUserCreate.Contains(x.UserId.Value))
                         .Select(x => x.PlayerId).ToListAsync();
                     if (ListPlayerIds != null && ListPlayerIds.Any())
                     {
@@ -295,7 +307,7 @@ namespace QuanLy.Service
                     }
                     return true;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     var contextTransaction = await contextTransactionTask;
                     contextTransaction.Rollback();
@@ -316,6 +328,7 @@ namespace QuanLy.Service
                 && e.ProjectId == item.ProjectId.Value
                 && e.Id != item.Id)
                 .OrderBy(e => e.TaskIndex)
+                .ThenBy(e => e.EndTime)
                 .ToListAsync();
             // CẬP NHẬT LẠI THỜI GIAN CHO TẤT CẢ TASK SAU TASK HIỆN TẠI (ProjectTasks item)
             if (previousTasks != null && previousTasks.Any())
@@ -418,6 +431,7 @@ namespace QuanLy.Service
                         e => e.UpdatedBy,
                     };
                     this.unitOfWork.Repository<ProjectTasks>().UpdateFieldsSave(previousTask, includeProperties);
+                    Context.Entry<ProjectTasks>(previousTask).State = EntityState.Detached;
                 }
                 await this.unitOfWork.SaveAsync();
             }
@@ -552,6 +566,113 @@ namespace QuanLy.Service
                 }
             });
 
+        }
+
+        public async Task UpdateStatusTask(int TaskId, int StatusDay)
+        {
+            var GetData = await this.unitOfWork.Repository<ProjectTasks>().GetQueryable().FirstOrDefaultAsync(x => x.Id == TaskId);
+            GetData.StatusDay = StatusDay;
+            GetData.UpdatedBy = "Server";
+            this.unitOfWork.Repository<ProjectTasks>().Update(GetData);
+            await this.unitOfWork.SaveAsync();
+            Context.Entry<ProjectTasks>(GetData).State = EntityState.Detached;
+        }
+
+        private async Task UpdateEndDateTask(int TaskId, DateTime EndTime)
+        {
+            var GetData = await this.unitOfWork.Repository<ProjectTasks>().GetQueryable().FirstOrDefaultAsync(x => x.Id == TaskId);
+            GetData.EndTime = EndTime;
+            GetData.UpdatedBy = "Server";
+            this.unitOfWork.Repository<ProjectTasks>().Update(GetData);
+            await this.unitOfWork.SaveAsync();
+            Context.Entry<ProjectTasks>(GetData).State = EntityState.Detached;
+        }
+        public async Task JobProjectTask()
+        {
+            var ListTasks = await this.unitOfWork.Repository<ProjectTasks>().GetQueryable().Where(
+                x => !x.IsDone &&
+                !x.Deleted &&
+                x.Active
+                ).ToListAsync();
+            foreach (var item in ListTasks)
+            {
+                if (item.EndTime.Value.Date < DateTime.Now.Date)
+                {
+                    await this.UpdateStatusTask(item.Id, 3);
+                    if (item.TaskInfinity && item.TaskEffect && !item.IsDone)
+                    {
+                        DateTime startTime, endTime = new DateTime();
+                        int daywork = item.WorkDayEffect + 1;
+                        var DataProject = await this.unitOfWork.Repository<Projects>().GetQueryable().FirstOrDefaultAsync(e => e.Id == item.ProjectId);
+                        var LayTaskTruocDo = await this.unitOfWork.Repository<ProjectTasks>().GetQueryable().Where(
+                            e => e.Id != item.Id &&
+                            e.TaskIndex < item.TaskIndex
+                            ).OrderByDescending(x => x.TaskIndex)
+                            .ThenByDescending(x => x.EndTime)
+                            .FirstOrDefaultAsync();
+                        if (LayTaskTruocDo != null)
+                            startTime = LayTaskTruocDo.EndTime.Value.AddDays(1);
+                        else startTime = DataProject.StartDate.Value.Date;
+
+                        endTime = startTime.AddDays(daywork);
+                        DateTime? dateCheck = null;
+                        // TỔNG SỐ NGÀY LÀM
+                        int totalDayWork = item.WorkDayEffect + 1;
+                        // TỔNG SỐ NGÀY NGHỈ
+                        int totalDayOff = 0;
+                        // NGÀY KIỂM TRA
+                        dateCheck = startTime;
+                        // NGÀY KẾT THÚC TASK DỰ TÍNH
+                        var workDate = startTime.AddDays(item.WorkDayEffect - 1);
+                        while (dateCheck.Value.Date <= workDate.Date)
+                        {
+                            var holidayConfig = await this.unitOfWork.Repository<HolidayConfigs>().GetQueryable()
+                                .Where(e => !e.Deleted && e.Active
+                                && e.FromDate.HasValue && e.FromDate.Value.Date <= dateCheck.Value.Date
+                                && e.ToDate.HasValue && e.ToDate.Value.Date >= dateCheck.Value.Date
+                                ).FirstOrDefaultAsync();
+
+                            if (holidayConfig != null)
+                            {
+                                // TỔNG SỐ NGÀY OFF TRONG KÌ NGHỈ ĐƯỢC CẤU HÌNH
+                                var totalHolidayConfigOff = (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
+                                totalDayOff += totalHolidayConfigOff;
+                                workDate = workDate.AddDays(totalHolidayConfigOff - 1);
+                                dateCheck = dateCheck.Value.AddDays(totalHolidayConfigOff);
+                                continue;
+                            }
+                            else
+                            {
+                                if (dateCheck.Value.Date.DayOfWeek == DayOfWeek.Saturday || dateCheck.Value.Date.DayOfWeek == DayOfWeek.Sunday)
+                                {
+                                    workDate = workDate.AddDays(1);
+                                    totalDayOff++;
+                                }
+                            }
+                            dateCheck = dateCheck.Value.AddDays(1);
+                        }
+                        endTime = startTime.AddDays(totalDayWork + totalDayOff - 1);
+                        await this.UpdateEndDateTask(item.Id, endTime);
+                        await this.UpdateTaskEffect(item, true);
+                    }
+                }
+            }
+        }
+        public async Task<string> UpdateTaskInfinity(int TaskId, bool Infinity)
+        {
+            var message = "";
+            var getData = await this.unitOfWork.Repository<ProjectTasks>().GetQueryable()
+                .Where(e =>
+                e.Id == TaskId
+                ).FirstOrDefaultAsync();
+            if(message == null)
+            {
+                message = "Không có dữ liệu task";
+            }
+            getData.TaskInfinity = Infinity;
+            this.unitOfWork.Repository<ProjectTasks>().Update(getData);
+            await this.unitOfWork.SaveAsync();
+            return message;
         }
     }
 }

@@ -14,5 +14,19 @@ namespace QuanLy.Interface
         Task UpdateTaskEffect(ProjectTasks item, bool isUpdated = false, bool isDeleted = false);
 
         Task<PagedList<ProjectTasks>> GetPagedListTaskUser(int UserId, SearchProjectTask searchProject);
+        /// <summary>
+        /// Cập nhật status của projectask theo định kỳ 1 ngày
+        /// </summary>
+        /// <returns></returns>
+        Task JobProjectTask();
+        /// <summary>
+        /// Update Status Task
+        /// </summary>
+        /// <param name="TaskId"></param>
+        /// <param name="StatusDay">2 đang làm , 1 xog , 3 trễ</param>
+        /// <returns></returns>
+        Task UpdateStatusTask(int TaskId, int StatusDay);
+
+        Task <string> UpdateTaskInfinity(int TaskId, bool Infinity);
     }
 }

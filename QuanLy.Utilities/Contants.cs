@@ -98,6 +98,8 @@ namespace QuanLy.Utilities
         /// </summary>
         public const string SR_POST_COMMENT_DELETE = "SR_POST_COMMENT_DELETE";
 
+        public const string UPDATE_BY_SEVER = "server";
+
         #endregion
     }
 }

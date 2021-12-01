@@ -11,5 +11,6 @@ namespace QuanLy.Interface
     public interface IDeviceBrowserService : IDomainService<DeviceBrowsers, BaseSearch>
     {
         Task UpdateHide(string PlayerId);
+        Task<string> InsertOrUpdatePlayerId(DeviceBrowsers entity);
     }
 }
