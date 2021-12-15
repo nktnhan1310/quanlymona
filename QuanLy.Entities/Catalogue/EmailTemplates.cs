@@ -4,12 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace QuanLy.Entities.Catalogue
+namespace QuanLy.Entities
 {
-    /// <summary>
-    /// Danh mục nguồn của dự án
-    /// </summary>
-    public class SourceProjectTypes : AppCoreCatalogueDomain
+    public class EmailTemplates : AppCoreCatalogueDomain
     {
     }
 }

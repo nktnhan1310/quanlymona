@@ -89,48 +89,48 @@ namespace QuanLy.Service
             return parameters;
         }
 
-        public override async Task<PagedList<ProjectToDoList>> GetPagedListData(SearchProjectToDoList baseSearch)
-        {
-            PagedList<ProjectToDoList> pagedList = new PagedList<ProjectToDoList>();
-            SqlParameter[] parameters = GetSqlParameters(baseSearch);
-            pagedList = await ExcuteQueryPagingAsync(this.GetStoreProcName(), parameters);
-            pagedList.PageIndex = baseSearch.PageIndex;
-            pagedList.PageSize = baseSearch.PageSize;
-            return pagedList;
-        }
-        private async Task<PagedList<ProjectToDoList>> ExcuteQueryPagingAsync(string commandText, SqlParameter[] sqlParameters)
-        {
-            return await Task.Run(() =>
-            {
-                PagedList<ProjectToDoList> pagedList = new PagedList<ProjectToDoList>();
-                DataTable dataTable = new DataTable();
-                SqlConnection connection = null;
-                SqlCommand command = null;
-                try
-                {
-                    connection = (SqlConnection)Context.Database.GetDbConnection();
-                    command = connection.CreateCommand();
-                    connection.Open();
-                    command.CommandText = commandText;
-                    command.Parameters.AddRange(sqlParameters);
-                    command.CommandType = CommandType.StoredProcedure;
-                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
-                    sqlDataAdapter.Fill(dataTable);
-                    pagedList.Items = MappingDataTable.ConvertToList<ProjectToDoList>(dataTable);
-                    if (pagedList.Items.Any())
-                        pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalPage ?? 0;
-                    return pagedList;
-                }
-                finally
-                {
-                    if (connection != null && connection.State == System.Data.ConnectionState.Open)
-                        connection.Close();
+        //public override async Task<PagedList<ProjectToDoList>> GetPagedListData(SearchProjectToDoList baseSearch)
+        //{
+        //    PagedList<ProjectToDoList> pagedList = new PagedList<ProjectToDoList>();
+        //    SqlParameter[] parameters = GetSqlParameters(baseSearch);
+        //    pagedList = await ExcuteQueryPagingAsync(this.GetStoreProcName(), parameters);
+        //    pagedList.PageIndex = baseSearch.PageIndex;
+        //    pagedList.PageSize = baseSearch.PageSize;
+        //    return pagedList;
+        //}
+        //private async Task<PagedList<ProjectToDoList>> ExcuteQueryPagingAsync(string commandText, SqlParameter[] sqlParameters)
+        //{
+        //    return await Task.Run(() =>
+        //    {
+        //        PagedList<ProjectToDoList> pagedList = new PagedList<ProjectToDoList>();
+        //        DataTable dataTable = new DataTable();
+        //        SqlConnection connection = null;
+        //        SqlCommand command = null;
+        //        try
+        //        {
+        //            connection = (SqlConnection)Context.Database.GetDbConnection();
+        //            command = connection.CreateCommand();
+        //            connection.Open();
+        //            command.CommandText = commandText;
+        //            command.Parameters.AddRange(sqlParameters);
+        //            command.CommandType = CommandType.StoredProcedure;
+        //            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+        //            sqlDataAdapter.Fill(dataTable);
+        //            pagedList.Items = MappingDataTable.ConvertToList<ProjectToDoList>(dataTable);
+        //            if (pagedList.Items.Any())
+        //                pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalPage ?? 0;
+        //            return pagedList;
+        //        }
+        //        finally
+        //        {
+        //            if (connection != null && connection.State == System.Data.ConnectionState.Open)
+        //                connection.Close();
 
-                    if (command != null)
-                        command.Dispose();
-                }
-            });
-        }
+        //            if (command != null)
+        //                command.Dispose();
+        //        }
+        //    });
+        //}
         public async Task<string> CheckUserExsitsInTask(List<ProjectToDoList> entity, string UserCreate)
         {
             string message = "";

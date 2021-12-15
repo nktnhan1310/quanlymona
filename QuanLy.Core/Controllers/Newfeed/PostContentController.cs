@@ -103,9 +103,9 @@ namespace QuanLy.Core.Controllers.Newfeed
                         }
                     }
 
-                    var CheckRoleAdmin = await this.userInGroupService.GetUserInGroupByUserId(UserId);
+                    var CheckRoleAdmin = await this.userInGroupService.GetUserInGroupByUserId(UserId,1);
                     //Role là admin thì tạo thông báo cho tất cả leader 
-                    if( CheckRoleAdmin != null && CheckRoleAdmin.UserGroupId == 1)
+                    if( CheckRoleAdmin != null)
                     {
                         var DataLink = "Admin/NewFeed/NewFeed/" + item.Id + "";
                         await this.notificationSingle.CreateNotifacationForLeader(item.CreatedBy, FullName, DataLink, "Bài đăng mới từ ");
@@ -137,7 +137,7 @@ namespace QuanLy.Core.Controllers.Newfeed
                 if (success)
                 {
                     appDomainResult.ResultCode = (int)HttpStatusCode.OK;
-                    var CheckRoleAdmin = await this.userInGroupService.GetUserInGroupByUserId(UserId);
+                    var CheckRoleAdmin = await this.userInGroupService.GetUserInGroupByUserId(UserId,1);
                     //Role là admin thì tạo thông báo cho tất cả leader 
                     if (CheckRoleAdmin != null && CheckRoleAdmin.UserGroupId == 1)
                     {

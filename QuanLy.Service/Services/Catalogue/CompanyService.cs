@@ -1,14 +1,17 @@
 ﻿using App.Core.Entities.DomainEntity;
+using App.Core.Interface.DbContext;
 using App.Core.Interface.UnitOfWork;
 using App.Core.Service.Services.DomainService;
 using App.Core.Utilities;
 using AutoMapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuanLy.Entities;
 using QuanLy.Entities.Catalogue;
 using QuanLy.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text;
@@ -18,29 +21,32 @@ namespace QuanLy.Service
 {
     public class CompanyService : CatalogueService<Companies, SearchCatalogueCompany>, ICompanyService
     {
-        public CompanyService(IAppUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        protected readonly IAppDbContext Context;
+        public CompanyService(IAppUnitOfWork unitOfWork, IMapper mapper
+            , IAppDbContext Context) : base(unitOfWork, mapper)
         {
+            this.Context = Context;
+            this.IsUseStore = true;
         }
 
-        public override async Task<PagedList<Companies>> GetPagedListData(SearchCatalogueCompany baseSearch)
+        public override async Task<string> GetExistItemMessage(Companies item)
         {
-            PagedList<Companies> pagedList = new PagedList<Companies>();
-            int skip = (baseSearch.PageIndex - 1) * baseSearch.PageSize;
-            int take = baseSearch.PageSize;
-            var items = Queryable.Where(e => !e.Deleted && e.Active
-            && (!baseSearch.CompanyId.HasValue || e.Id == baseSearch.CompanyId.Value)
-            && (!baseSearch.ParentCompanyId.HasValue || e.ParentId == baseSearch.ParentCompanyId.Value)
-            && (string.IsNullOrEmpty(baseSearch.SearchContent) || e.Name.ToLower().Contains(baseSearch.SearchContent.ToLower()))
-            );
-            decimal itemCount = items.Count();
-            pagedList = new PagedList<Companies>()
+            var message = "";
+            var isExists = await this.unitOfWork.Repository<Companies>().GetQueryable()
+                .Where(x =>
+                x.Id != item.Id &&
+                x.Code == item.Code)
+                .AnyAsync();
+            if (isExists)
             {
-                PageIndex = baseSearch.PageIndex,
-                PageSize = baseSearch.PageSize,
-                TotalItem = (int)itemCount,
-                Items = await items.OrderBy(baseSearch.OrderBy).Skip(skip).Take(take).ToListAsync()
-            };
-            return pagedList;
+                message = "Mã công ty đã tồn tại";
+            }
+            return message;
+        }
+
+        protected override string GetStoreProcName()
+        {
+            return "Mona_sp_load_Companies_PagingData";
         }
     }
 }

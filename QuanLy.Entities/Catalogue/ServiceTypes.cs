@@ -11,8 +11,5 @@ namespace QuanLy.Entities.Catalogue
     /// </summary>
     public class ServiceTypes : AppCoreCatalogueDomain
     {
-        [NotMapped]
-        public int? TotalPage { get; set; }
-
     }
 }

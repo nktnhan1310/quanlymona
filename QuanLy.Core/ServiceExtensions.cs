@@ -108,6 +108,8 @@ namespace QuanLy.Core
             services.AddScoped<IServiceTypes, ServiceTypeService>();
             services.AddScoped<IPostContents, PostContentService>();
             services.AddScoped<IPostComments, PostCommentService>();
+            services.AddScoped<ICategoryMappingAccount, CategoryMappingAccountService>();
+            services.AddScoped<IEmailTemplate, EmailTemplateService>();
 
             #endregion
 

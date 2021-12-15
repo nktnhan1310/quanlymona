@@ -22,9 +22,13 @@ namespace QuanLy.Service
             this.context = context;
         }
 
-        public async Task<UserInGroupCores> GetUserInGroupByUserId(int UserId)
+        public async Task<UserInGroupCores> GetUserInGroupByUserId(int UserId, int RoleId)
         {
-            return  await unitOfWork.Repository<UserInGroupCores>().GetQueryable().FirstOrDefaultAsync(x=>x.UserId == UserId);
+            return  await unitOfWork.Repository<UserInGroupCores>().GetQueryable()
+                .Where(x=>
+                x.UserId == UserId &&
+                x.UserGroupId == RoleId)
+                .FirstOrDefaultAsync();
         }
     }
 }

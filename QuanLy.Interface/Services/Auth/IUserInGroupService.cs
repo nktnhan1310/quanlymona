@@ -10,6 +10,6 @@ namespace QuanLy.Interface
 {
     public interface IUserInGroupService : IUserInGroupCoreService
     {
-        Task<UserInGroupCores> GetUserInGroupByUserId(int UserId);
+        Task<UserInGroupCores> GetUserInGroupByUserId(int UserId,int RoleId);
     }
 }

@@ -33,21 +33,21 @@ namespace QuanLy.Service
             return "User_GetPagingData";
         }
 
-        protected override SqlParameter[] GetSqlParameters(BaseSearchUser baseSearch)
-        {
-            SqlParameter[] parameters =
-            {
-                new SqlParameter("@PageIndex", baseSearch.PageIndex),
-                new SqlParameter("@PageSize", baseSearch.PageSize),
-                new SqlParameter("@Email", string.IsNullOrEmpty(baseSearch.Email) ? DBNull.Value : (object)baseSearch.Email),
-                new SqlParameter("@Phone", baseSearch.Phone),
-                new SqlParameter("@UserGroupId", baseSearch.UserGroupId),
-                new SqlParameter("@SearchContent", baseSearch.SearchContent),
-                new SqlParameter("@OrderBy", baseSearch.OrderBy),
-                new SqlParameter("@TotalPage", SqlDbType.Int, 0),
-            };
-            return parameters;
-        }
+        //protected override SqlParameter[] GetSqlParameters(BaseSearchUser baseSearch)
+        //{
+        //    SqlParameter[] parameters =
+        //    {
+        //        new SqlParameter("@PageIndex", baseSearch.PageIndex),
+        //        new SqlParameter("@PageSize", baseSearch.PageSize),
+        //        new SqlParameter("@Email", string.IsNullOrEmpty(baseSearch.Email) ? DBNull.Value : (object)baseSearch.Email),
+        //        new SqlParameter("@Phone", baseSearch.Phone),
+        //        new SqlParameter("@UserGroupId", baseSearch.UserGroupId),
+        //        new SqlParameter("@SearchContent", baseSearch.SearchContent),
+        //        new SqlParameter("@OrderBy", baseSearch.OrderBy),
+        //        new SqlParameter("@TotalPage", SqlDbType.Int, 0),
+        //    };
+        //    return parameters;
+        //}
 
         /// <summary>
         /// Kiểm tra user đã tồn tại chưa?
@@ -559,6 +559,68 @@ namespace QuanLy.Service
                     command = connection.CreateCommand();
                     connection.Open();
                     command.CommandText = "Mona_sp_LoadUser_Role_Leader";
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+                    sqlDataAdapter.Fill(dataTable);
+                    //pagedList.TotalItem = int.Parse(command.Parameters["@TotalPage"].Value.ToString());
+                    Model = MappingDataTable.ConvertToList<Users>(dataTable);
+                    return Model;
+                }
+                finally
+                {
+                    if (connection != null && connection.State == System.Data.ConnectionState.Open)
+                        connection.Close();
+
+                    if (command != null)
+                        command.Dispose();
+                }
+            });
+        }
+        public async Task<List<Users>> Mona_sp_LoadUser_Role_LeaderAndManager()
+        {
+            return await Task.Run(() =>
+            {
+                DataTable dataTable = new DataTable();
+                SqlConnection connection = null;
+                SqlCommand command = null;
+                try
+                {
+                    List<Users> Model = new List<Users>();
+                    connection = (SqlConnection)coreDbContext.Database.GetDbConnection();
+                    command = connection.CreateCommand();
+                    connection.Open();
+                    command.CommandText = "Mona_sp_LoadUser_Role_LeaderAndManager";
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+                    sqlDataAdapter.Fill(dataTable);
+                    Model = MappingDataTable.ConvertToList<Users>(dataTable);
+                    return Model;
+                }
+                finally
+                {
+                    if (connection != null && connection.State == System.Data.ConnectionState.Open)
+                        connection.Close();
+
+                    if (command != null)
+                        command.Dispose();
+                }
+            });
+        }
+
+        public async Task<List<Users>> Mona_sp_LoadUser_Role_CSKH()
+        {
+            return await Task.Run(() =>
+            {
+                DataTable dataTable = new DataTable();
+                SqlConnection connection = null;
+                SqlCommand command = null;
+                try
+                {
+                    List<Users> Model = new List<Users>();
+                    connection = (SqlConnection)coreDbContext.Database.GetDbConnection();
+                    command = connection.CreateCommand();
+                    connection.Open();
+                    command.CommandText = "Mona_sp_LoadUser_Role_CSKH";
                     command.CommandType = CommandType.StoredProcedure;
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
                     sqlDataAdapter.Fill(dataTable);

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using QuanLy.Entities;
 using QuanLy.Interface;
+using QuanLy.Interface.Services;
 using QuanLy.Utilities;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace QuanLy.Service
     public class ProjectUserService : DomainService<ProjectUsers, BaseSearch>, IProjectUserService
     {
         protected readonly IAppDbContext Context;
+        protected readonly IUserService userService;
         protected readonly IDeviceBrowserService deviceBrowserService;
         protected readonly INotificationSingle notificationSingle;
         protected readonly IHubContext<CommentHub> _hubContext;
@@ -30,12 +32,14 @@ namespace QuanLy.Service
         public ProjectUserService(IAppUnitOfWork unitOfWork, IMapper mapper
             , IDeviceBrowserService deviceBrowserService
             , INotificationSingle notificationSingle
+            , IUserService userService
             , IHubContext<CommentHub> _hubContext
             , IConfiguration configuration
             , IAppDbContext context) : base(unitOfWork, mapper)
         {
             this.deviceBrowserService = deviceBrowserService;
             this.Context = context;
+            this.userService = userService;
             this.configuration = configuration;
             this.notificationSingle = notificationSingle;
             this._hubContext = _hubContext;
@@ -83,7 +87,7 @@ namespace QuanLy.Service
                 GetDatatask.Updated = DateTime.UtcNow.AddHours(7);
                 this.unitOfWork.Repository<ProjectTasks>().Update(GetDatatask);
                 await this.unitOfWork.SaveAsync();
-                var listUsers = await this.Mona_sp_LoadUser_Role_LeaderAndManager();
+                var listUsers = await this.userService.Mona_sp_LoadUser_Role_LeaderAndManager();
                 foreach(var item in listUsers)
                 {
                     var DataNotification = await this.notificationSingle.CreateNotification(0, "Hoàn thành Task", $"Admin/Task/TaskList?task-detail/{GetData.TaskId.ToString()}", item.Id, 1, Contants.UPDATE_BY_SEVER);
@@ -105,37 +109,6 @@ namespace QuanLy.Service
                 }
             }
             return message;
-        }
-
-        private async Task<List<Users>> Mona_sp_LoadUser_Role_LeaderAndManager()
-        {
-            return await Task.Run(() =>
-            {
-                DataTable dataTable = new DataTable();
-                SqlConnection connection = null;
-                SqlCommand command = null;
-                try
-                {
-                    List<Users> Model = new List<Users>();
-                    connection = (SqlConnection)Context.Database.GetDbConnection();
-                    command = connection.CreateCommand();
-                    connection.Open();
-                    command.CommandText = "Mona_sp_LoadUser_Role_LeaderAndManager";
-                    command.CommandType = CommandType.StoredProcedure;
-                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
-                    sqlDataAdapter.Fill(dataTable);
-                    Model = MappingDataTable.ConvertToList<Users>(dataTable);
-                    return Model;
-                }
-                finally
-                {
-                    if (connection != null && connection.State == System.Data.ConnectionState.Open)
-                        connection.Close();
-
-                    if (command != null)
-                        command.Dispose();
-                }
-            });
         }
     }
 }

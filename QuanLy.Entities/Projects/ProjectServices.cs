@@ -73,8 +73,6 @@ namespace QuanLy.Entities
         [NotMapped]
         public string ServiceName { get; set; }
 
-        [NotMapped]
-        public int? TotalPage { get; set; }
 
         [NotMapped]
         public string ListPlayerId { get; set; }

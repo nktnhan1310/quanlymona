@@ -19,5 +19,10 @@ namespace QuanLy.Model
         /// Ghi chú
         /// </summary>
         public string Note { get; set; }
+
+        /// <summary>
+        /// Số ngày nghỉ
+        /// </summary>
+        public double Day { get; set; }
     }
 }

@@ -113,7 +113,7 @@ namespace QuanLy.Service.Services.Newfeed
                     //pagedList.TotalItem = int.Parse(command.Parameters["@TotalPage"].Value.ToString());
                     pagedList.Items = MappingDataTable.ConvertToList<PostComments>(dataTable);
                     if (pagedList.Items.Any())
-                        pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalPage ?? 0;
+                        pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalItem;
                     return pagedList;
                 }
                 finally

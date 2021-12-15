@@ -1,5 +1,8 @@
-﻿using App.Core.Entities.Configuration;
+﻿using App.Core.Entities;
+using App.Core.Entities.Configuration;
 using App.Core.Models;
+using App.Core.Models.AuthModel;
+using App.Core.Models.AuthModel.RequestModel;
 using App.Core.Models.DomainModel;
 using App.Core.Utilities;
 using AutoMapper;
@@ -27,6 +30,16 @@ namespace QuanLy.Model
             CreateMap<UserModel, Users>().ReverseMap();
             CreateMap<RequestUserModel, Users>().ReverseMap();
             CreateMap<PagedList<UserModel>, PagedList<Users>>().ReverseMap();
+
+
+            CreateMap<UserCoreModel, UserCores>().ReverseMap();
+            CreateMap<RequestUserCoreModel, UserCores>().ReverseMap();
+            CreateMap<PagedList<UserCoreModel>, PagedList<UserCores>>().ReverseMap();
+
+            CreateMap<UserFileCoreModel, UserFileCores>().ReverseMap();
+            CreateMap<RequestCoreFileModel, UserFileCores>().ReverseMap();
+            CreateMap<PagedList<UserFileCoreModel>, PagedList<UserFileCores>>().ReverseMap();
+            
 
             CreateMap<UserGroupModel, UserGroups>().ReverseMap();
             CreateMap<RequestUserGroupModel, UserGroups>().ReverseMap();
@@ -118,7 +131,7 @@ namespace QuanLy.Model
 
             CreateMap<TaskTypeModel, TaskTypes>().ReverseMap();
             CreateMap<RequestTaskTypeModel, TaskTypes>().ReverseMap();
-            CreateMap<PagedList<TaskTypeModel>, PagedList<RequestTypes>>().ReverseMap();
+            CreateMap<PagedList<TaskTypeModel>, PagedList<TaskTypes>>().ReverseMap();
 
             CreateMap<RequestTypeModel, RequestTypes>().ReverseMap();
             CreateMap<RequestCoreCatalogueModel, RequestTypes>().ReverseMap();
@@ -147,6 +160,14 @@ namespace QuanLy.Model
             CreateMap<CompanyModel, Companies>().ReverseMap();
             CreateMap<RequestCatalogueCompanyModel, Companies>().ReverseMap();
             CreateMap<PagedList<CompanyModel>, PagedList<Companies>>().ReverseMap();
+
+            CreateMap<CategoryMappingAccountModel, CategoryMappingAccounts>().ReverseMap();
+            CreateMap<RequestCategoryMappingAccountModel, CategoryMappingAccounts>().ReverseMap();
+            CreateMap<PagedList<CategoryMappingAccountModel>, PagedList<CategoryMappingAccounts>>().ReverseMap();
+
+            CreateMap<EmailTemplateModel, EmailTemplates>().ReverseMap();
+            CreateMap<RequestCoreCatalogueModel, EmailTemplates>().ReverseMap();
+            CreateMap<PagedList<EmailTemplateModel>, PagedList<EmailTemplates>>().ReverseMap();
 
             #endregion
 

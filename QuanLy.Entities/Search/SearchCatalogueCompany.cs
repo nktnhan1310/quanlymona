@@ -10,10 +10,10 @@ namespace QuanLy.Entities
         /// <summary>
         /// Mã công ty
         /// </summary>
-        public int? CompanyId { get; set; }
+        //public int? CompanyId { get; set; }
         /// <summary>
         /// Mã công ty cha
         /// </summary>
-        public int? ParentCompanyId { get; set; }
+        //public int? ParentCompanyId { get; set; }
     }
 }

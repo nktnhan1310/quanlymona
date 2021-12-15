@@ -17,8 +17,6 @@ namespace QuanLy.Entities.Newfeed
         public int PostType { get; set; }
 
         [NotMapped]
-        public int? TotalPage { get; set; }
-        [NotMapped]
         public int? SoComment { get; set; }
     }
 }

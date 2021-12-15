@@ -19,8 +19,5 @@ namespace QuanLy.Entities
         public int QuickView { get; set; }
         public int TypeNoti { get; set; }
 
-        [NotMapped]
-        public int ? TotalPage { get; set; }
-
     }
 }

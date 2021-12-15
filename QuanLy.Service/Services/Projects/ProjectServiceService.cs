@@ -70,51 +70,51 @@ namespace QuanLy.Service
             };
             return parameters;
         }
-        public override async Task<PagedList<ProjectServices>> GetPagedListData(SearchProject baseSearch)
-        {
-            PagedList<ProjectServices> pagedList = new PagedList<ProjectServices>();
-            SqlParameter[] parameters = GetSqlParameters(baseSearch);
-            pagedList = await ExcuteQueryPagingAsync(this.GetStoreProcName(), parameters);
-            pagedList.PageIndex = baseSearch.PageIndex;
-            pagedList.PageSize = baseSearch.PageSize;
-            return pagedList;
-        }
+        //public override async Task<PagedList<ProjectServices>> GetPagedListData(SearchProject baseSearch)
+        //{
+        //    PagedList<ProjectServices> pagedList = new PagedList<ProjectServices>();
+        //    SqlParameter[] parameters = GetSqlParameters(baseSearch);
+        //    pagedList = await ExcuteQueryPagingAsync(this.GetStoreProcName(), parameters);
+        //    pagedList.PageIndex = baseSearch.PageIndex;
+        //    pagedList.PageSize = baseSearch.PageSize;
+        //    return pagedList;
+        //}
 
-        private async Task<PagedList<ProjectServices>> ExcuteQueryPagingAsync(string commandText, SqlParameter[] sqlParameters)
-        {
-            return await Task.Run(() =>
-            {
-                PagedList<ProjectServices> pagedList = new PagedList<ProjectServices>();
-                DataTable dataTable = new DataTable();
-                SqlConnection connection = null;
-                SqlCommand command = null;
-                try
-                {
-                    connection = (SqlConnection)Context.Database.GetDbConnection();
-                    command = connection.CreateCommand();
-                    connection.Open();
-                    command.CommandText = commandText;
-                    command.Parameters.AddRange(sqlParameters);
-                    //command.Parameters["@TotalPage"].Direction = ParameterDirection.Output;
-                    command.CommandType = CommandType.StoredProcedure;
-                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
-                    sqlDataAdapter.Fill(dataTable);
-                    //pagedList.TotalItem = int.Parse(command.Parameters["@TotalPage"].Value.ToString());
-                    pagedList.Items = MappingDataTable.ConvertToList<ProjectServices>(dataTable);
-                    if (pagedList.Items.Any())
-                        pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalPage ?? 0;
-                    return pagedList;
-                }
-                finally
-                {
-                    if (connection != null && connection.State == System.Data.ConnectionState.Open)
-                        connection.Close();
+        //private async Task<PagedList<ProjectServices>> ExcuteQueryPagingAsync(string commandText, SqlParameter[] sqlParameters)
+        //{
+        //    return await Task.Run(() =>
+        //    {
+        //        PagedList<ProjectServices> pagedList = new PagedList<ProjectServices>();
+        //        DataTable dataTable = new DataTable();
+        //        SqlConnection connection = null;
+        //        SqlCommand command = null;
+        //        try
+        //        {
+        //            connection = (SqlConnection)Context.Database.GetDbConnection();
+        //            command = connection.CreateCommand();
+        //            connection.Open();
+        //            command.CommandText = commandText;
+        //            command.Parameters.AddRange(sqlParameters);
+        //            //command.Parameters["@TotalPage"].Direction = ParameterDirection.Output;
+        //            command.CommandType = CommandType.StoredProcedure;
+        //            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+        //            sqlDataAdapter.Fill(dataTable);
+        //            //pagedList.TotalItem = int.Parse(command.Parameters["@TotalPage"].Value.ToString());
+        //            pagedList.Items = MappingDataTable.ConvertToList<ProjectServices>(dataTable);
+        //            if (pagedList.Items.Any())
+        //                pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalPage ?? 0;
+        //            return pagedList;
+        //        }
+        //        finally
+        //        {
+        //            if (connection != null && connection.State == System.Data.ConnectionState.Open)
+        //                connection.Close();
 
-                    if (command != null)
-                        command.Dispose();
-                }
-            });
-        }
+        //            if (command != null)
+        //                command.Dispose();
+        //        }
+        //    });
+        //}
         private async Task<List<ProjectServices>> ListProjectServiceExprireDate()
         {
             return await unitOfWork.Repository<ProjectServices>().GetQueryable().Where(x => x.EndDate.Value.Date >= DateTime.Now.Date && DateTime.Now.AddDays(30).Date > x.EndDate.Value.Date && x.Status != 3 && x.StillInUse != 2).ToListAsync();

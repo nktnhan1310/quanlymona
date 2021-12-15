@@ -68,6 +68,8 @@ namespace QuanLy.AppDbContext
             modelBuilder.Entity<HolidayConfigs>(x => x.ToTable("HolidayConfigs"));
             modelBuilder.Entity<ProjectCustomerStatuses>(x => x.ToTable("ProjectCustomerStatuses"));
             modelBuilder.Entity<ServiceTypes>(x => x.ToTable("ServiceTypes"));
+            modelBuilder.Entity<CategoryMappingAccounts>(x => x.ToTable("CategoryMappingAccounts"));
+            modelBuilder.Entity<EmailTemplates>(x => x.ToTable("EmailTemplates"));
 
             #endregion
 
@@ -179,6 +181,8 @@ namespace QuanLy.AppDbContext
         public DbSet<SourceTypes> SourceTypes { get; set; }
         public DbSet<TaskTypes> TaskTypes { get; set; }
         public DbSet<ServiceTypes> ServiceTypes { get; set; }
+        public DbSet<CategoryMappingAccounts> categoryMappingAccounts { get; set; }
+        public DbSet<EmailTemplates> EmailTemplates { get; set; }
         #endregion
 
         #region NewFeed

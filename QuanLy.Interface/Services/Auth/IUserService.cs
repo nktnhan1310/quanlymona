@@ -21,9 +21,21 @@ namespace QuanLy.Interface.Services
         Task<bool> IsInUserGroup(int userId, string userGroupCode);
 
         /// <summary>
-        /// Lấy danh sach user Leader Manager
+        /// Lấy danh sach user Leader
         /// </summary>
         /// <returns></returns>
         Task<List<Users>> Mona_sp_LoadUser_Role_Leader();
+
+        /// <summary>
+        /// Lấy danh sach user chăm sóc khách hàng
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Users>> Mona_sp_LoadUser_Role_CSKH();
+
+        /// <summary>
+        /// Láy danh sách User Leader và Manager
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Users>> Mona_sp_LoadUser_Role_LeaderAndManager();
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 namespace QuanLy.Entities.Catalogue
 {
@@ -15,5 +16,6 @@ namespace QuanLy.Entities.Catalogue
         /// </summary>
         [StringLength(100)]
         public string ColorCode { get; set; }
+
     }
 }

@@ -108,8 +108,6 @@ namespace QuanLy.Entities
         [NotMapped]
         public List<ProjectToDoList> ProjectToDoLists { get; set; }
 
-        [NotMapped]
-        public int? TotalPage { get; set; }
 
         [NotMapped]
         public int? NumberOverDue { get; set; }

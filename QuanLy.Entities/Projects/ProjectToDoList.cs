@@ -77,8 +77,6 @@ namespace QuanLy.Entities
         [NotMapped]
         public string UserFullName { get; set; }
 
-        [NotMapped]
-        public int? TotalPage { get; set; }
 
         #endregion
 

@@ -47,7 +47,7 @@ namespace QuanLy.Service
 
                 new SqlParameter("@SearchContent", baseSearch.SearchContent),
                 new SqlParameter("@OrderBy", baseSearch.OrderBy),
-                new SqlParameter("@TotalPage", SqlDbType.Int, 0),
+                //new SqlParameter("@TotalPage", SqlDbType.Int, 0),
             };
             return parameters;
         }

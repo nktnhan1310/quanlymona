@@ -6,7 +6,7 @@ using App.Core.Utilities;
 using AutoMapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using QuanLy.Entities.Catalogue;
+using QuanLy.Entities;
 using QuanLy.Interface;
 using System;
 using System.Collections.Generic;
@@ -17,32 +17,34 @@ using System.Threading.Tasks;
 
 namespace QuanLy.Service
 {
-    public class ProjectStatusService : CatalogueService<ProjectStatuses, BaseSearch>, IProjectStatusService
+    public class CategoryMappingAccountService : CatalogueService<CategoryMappingAccounts, BaseSearch>, ICategoryMappingAccount
     {
         protected readonly IAppDbContext Context;
-        public ProjectStatusService(IAppUnitOfWork unitOfWork, IMapper mapper
-             , IAppDbContext Context) : base(unitOfWork, mapper)
+        public CategoryMappingAccountService(IAppUnitOfWork unitOfWork, IMapper mapper
+            , IAppDbContext Context) : base(unitOfWork, mapper)
         {
-            this.Context = Context;
             this.IsUseStore = true;
+            this.Context = Context;
         }
-        public override async Task<string> GetExistItemMessage(ProjectStatuses item)
+
+        public override async Task<string> GetExistItemMessage(CategoryMappingAccounts item)
         {
             var message = "";
-            var isExists = await this.unitOfWork.Repository<ProjectStatuses>().GetQueryable()
+            var isExists = await this.unitOfWork.Repository<CategoryMappingAccounts>().GetQueryable()
                 .Where(x =>
                 x.Id != item.Id &&
                 x.Code == item.Code)
                 .AnyAsync();
             if (isExists)
             {
-                message = "Mã trạng thái đã tồn tại";
+                message = "Mã mapping đã tồn tại";
             }
-            return message;
+            return message;  
         }
+
         protected override string GetStoreProcName()
         {
-            return "Mona_sp_Load_Project_Status_PagingData";
+            return "Mona_sp_load_Category_Mapping_Account_PagingData";
         }
     }
 }

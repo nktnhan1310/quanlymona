@@ -4,11 +4,38 @@
         <name>QuanLy.Core</name>
     </assembly>
     <members>
+        <member name="M:QuanLy.Core.Controllers.UserController.GetSource">
+            <summary>
+            Lấy source
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueCompanyController.GetParentCompany(System.Nullable{System.Int32})">
             <summary>
             Lấy thông tin công ty cha từ thông tin công ty con hiện tại
             </summary>
-            <param name="currentCompanyId"></param>
+            <param name="currentCompanyId"></param>s
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueCompanyController.GetListParentCompany">
+            <summary>
+            Lấy danh sách thông tin công ty cha 
+            </summary>
+            <param></param>s
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueCompanyController.AddItem(QuanLy.Model.RequestCatalogueCompanyModel)">
+            <summary>
+            thêm công ty
+            </summary>
+            <param name="itemModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueCompanyController.UpdateItem(QuanLy.Model.RequestCatalogueCompanyModel)">
+            <summary>
+            cập nhật thông tin
+            </summary>
+            <param name="itemModel"></param>
             <returns></returns>
         </member>
         <member name="M:QuanLy.Core.Controllers.Catalogue.CatalogueController.GetProjectStatusCatalogue(System.String)">

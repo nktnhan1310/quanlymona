@@ -139,66 +139,66 @@ namespace QuanLy.Service
             return "Mona_sp_Load_NotificationSingle_User_PagingData";
         }
 
-        protected override SqlParameter[] GetSqlParameters(SearchNotification baseSearch)
-        {
-            SqlParameter[] parameters =
-            {
-                new SqlParameter("@UID", baseSearch.UID),
-                new SqlParameter("@PageIndex", baseSearch.PageIndex),
-                new SqlParameter("@PageSize", baseSearch.PageSize),
-                new SqlParameter("@SearchContent", baseSearch.SearchContent),
-                new SqlParameter("@OrderBy", baseSearch.OrderBy),
-                new SqlParameter("@FromDate", baseSearch.FromDate),
-                new SqlParameter("@ToDate", baseSearch.ToDate),
-                new SqlParameter("@Status", baseSearch.Status),
+        //protected override SqlParameter[] GetSqlParameters(SearchNotification baseSearch)
+        //{
+        //    SqlParameter[] parameters =
+        //    {
+        //        new SqlParameter("@UID", baseSearch.UID),
+        //        new SqlParameter("@PageIndex", baseSearch.PageIndex),
+        //        new SqlParameter("@PageSize", baseSearch.PageSize),
+        //        new SqlParameter("@SearchContent", baseSearch.SearchContent),
+        //        new SqlParameter("@OrderBy", baseSearch.OrderBy),
+        //        new SqlParameter("@FromDate", baseSearch.FromDate),
+        //        new SqlParameter("@ToDate", baseSearch.ToDate),
+        //        new SqlParameter("@Status", baseSearch.Status),
 
-            };
-            return parameters;
-        }
+        //    };
+        //    return parameters;
+        //}
 
-        public override async Task<PagedList<NotificationSingles>> GetPagedListData(SearchNotification baseSearch)
-        {
-            PagedList<NotificationSingles> pagedList = new PagedList<NotificationSingles>();
-            SqlParameter[] parameters = GetSqlParameters(baseSearch);
-            pagedList = await ExcuteQueryPagingAsync(this.GetStoreProcName(), parameters);
-            pagedList.PageIndex = baseSearch.PageIndex;
-            pagedList.PageSize = baseSearch.PageSize;
-            return pagedList;
-        }
+        //public override async Task<PagedList<NotificationSingles>> GetPagedListData(SearchNotification baseSearch)
+        //{
+        //    PagedList<NotificationSingles> pagedList = new PagedList<NotificationSingles>();
+        //    SqlParameter[] parameters = GetSqlParameters(baseSearch);
+        //    pagedList = await ExcuteQueryPagingAsync(this.GetStoreProcName(), parameters);
+        //    pagedList.PageIndex = baseSearch.PageIndex;
+        //    pagedList.PageSize = baseSearch.PageSize;
+        //    return pagedList;
+        //}
 
-        private async Task<PagedList<NotificationSingles>> ExcuteQueryPagingAsync(string commandText, SqlParameter[] sqlParameters)
-        {
-            return await Task.Run(() =>
-            {
-                PagedList<NotificationSingles> pagedList = new PagedList<NotificationSingles>();
-                DataTable dataTable = new DataTable();
-                SqlConnection connection = null;
-                SqlCommand command = null;
-                try
-                {
-                    connection = (SqlConnection)Context.Database.GetDbConnection();
-                    command = connection.CreateCommand();
-                    connection.Open();
-                    command.CommandText = commandText;
-                    command.Parameters.AddRange(sqlParameters);
-                    command.CommandType = CommandType.StoredProcedure;
-                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
-                    sqlDataAdapter.Fill(dataTable);
-                    pagedList.Items = MappingDataTable.ConvertToList<NotificationSingles>(dataTable);
-                    if (pagedList.Items.Any())
-                        pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalPage ?? 0;
-                    return pagedList;
-                }
-                finally
-                {
-                    if (connection != null && connection.State == System.Data.ConnectionState.Open)
-                        connection.Close();
+        //private async Task<PagedList<NotificationSingles>> ExcuteQueryPagingAsync(string commandText, SqlParameter[] sqlParameters)
+        //{
+        //    return await Task.Run(() =>
+        //    {
+        //        PagedList<NotificationSingles> pagedList = new PagedList<NotificationSingles>();
+        //        DataTable dataTable = new DataTable();
+        //        SqlConnection connection = null;
+        //        SqlCommand command = null;
+        //        try
+        //        {
+        //            connection = (SqlConnection)Context.Database.GetDbConnection();
+        //            command = connection.CreateCommand();
+        //            connection.Open();
+        //            command.CommandText = commandText;
+        //            command.Parameters.AddRange(sqlParameters);
+        //            command.CommandType = CommandType.StoredProcedure;
+        //            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
+        //            sqlDataAdapter.Fill(dataTable);
+        //            pagedList.Items = MappingDataTable.ConvertToList<NotificationSingles>(dataTable);
+        //            if (pagedList.Items.Any())
+        //                pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalItem;
+        //            return pagedList;
+        //        }
+        //        finally
+        //        {
+        //            if (connection != null && connection.State == System.Data.ConnectionState.Open)
+        //                connection.Close();
 
-                    if (command != null)
-                        command.Dispose();
-                }
-            });
-        }
+        //            if (command != null)
+        //                command.Dispose();
+        //        }
+        //    });
+        //}
 
         public async Task<string> UpdateStaus(int Id,int UID)
         {

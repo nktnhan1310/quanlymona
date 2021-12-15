@@ -54,7 +54,5 @@ namespace QuanLy.Model
         /// </summary>
         public int Priority { get; set; }
 
-        [NotMapped]
-        public int TotalPage { get; set; }
     }
 }
