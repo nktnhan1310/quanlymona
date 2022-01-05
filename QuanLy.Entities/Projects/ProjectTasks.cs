@@ -102,6 +102,9 @@ namespace QuanLy.Entities
         [NotMapped]
         public List<int> UserIds { get; set; }
 
+        [NotMapped]
+        public string ListUserId { get; set; }
+
         /// <summary>
         /// Danh sách ToDoList
         /// </summary>

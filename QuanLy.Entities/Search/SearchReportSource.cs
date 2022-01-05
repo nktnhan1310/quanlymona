@@ -28,6 +28,6 @@ namespace QuanLy.Entities
         /// 1 => theo tháng/năm
         /// 2 => theo năm
         /// </summary>
-        public int SearchType { get; set; }
+        //public int SearchType { get; set; }
     }
 }

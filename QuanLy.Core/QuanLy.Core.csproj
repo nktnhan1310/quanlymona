@@ -103,9 +103,5 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="upload\" />
-  </ItemGroup>
-
 
 </Project>

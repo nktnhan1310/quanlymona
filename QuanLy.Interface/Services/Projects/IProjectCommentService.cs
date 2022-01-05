@@ -7,7 +7,7 @@ using System.Text;
 
 namespace QuanLy.Interface
 {
-    public interface IProjectCommentService : IDomainService<ProjectComments, BaseSearch>
+    public interface IProjectCommentService : IDomainService<ProjectComments, SearchProjectComment>
     {
     }
 }

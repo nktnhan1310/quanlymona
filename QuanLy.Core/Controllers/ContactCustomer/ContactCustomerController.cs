@@ -40,6 +40,7 @@ namespace QuanLy.Core.Controllers
         protected ISMSConfigurationCoreService sMSConfigurationService;
         protected ISMSEmailTemplateCoreService sMSEmailTemplateService;
         protected IUserCoreService userCoreService;
+        protected IUserGroupCoreService userGroupCoreService;
         protected IContactCustomerMappingRequestService contactCustomerMappingRequestService;
         protected ICompanyService companyService;
         protected IContactCustomerServiceTypeService contactCustomerServiceTypeService;
@@ -71,6 +72,7 @@ namespace QuanLy.Core.Controllers
             requestTypeService = serviceProvider.GetRequiredService<IRequestTypeService>();
             sourceTypeService = serviceProvider.GetRequiredService<ISourceTypeService>();
             reportSourceService = serviceProvider.GetRequiredService<IReportSourceService>();
+            userGroupCoreService = serviceProvider.GetRequiredService<IUserGroupCoreService>();
 
         }
 
@@ -96,7 +98,7 @@ namespace QuanLy.Core.Controllers
 
                 if (item.SaleId.HasValue && item.SaleId.Value > 0)
                 {
-                    var saleInfo = await this.userService.GetSingleAsync(e => !e.Deleted && e.Active && e.Id == item.SaleId.Value);
+                    var saleInfo = await this.userCoreService.GetSingleAsync(e => !e.Deleted && e.Active && e.Id == item.SaleId.Value);
                     if (saleInfo != null) item.SaleName = saleInfo.UserFullName;
                 }
 
@@ -221,17 +223,17 @@ namespace QuanLy.Core.Controllers
                         // Check thêm thông tin user khách hàng nếu trạng thái CSKH là đã liên hệ
                         if (item.Status == (int)CatalogueEnums.ContactCustomerStatus.Connected)
                         {
-                            var existUser = await this.userService.GetSingleAsync(e => !e.Deleted && e.Active && e.Phone == item.Phone);
+                            var existUser = await this.userCoreService.GetSingleAsync(e => !e.Deleted && e.Active && e.Phone == item.Phone);
                             // Không có thông tin user => Thêm mới user
                             if (existUser == null)
                             {
                                 // Add nhóm khách cho user
-                                var customerGroup = await this.userGroupService.GetSingleAsync(e => e.Code == Contants.USER_GROUP_CUSTOMER);
+                                var customerGroup = await this.userGroupCoreService.GetSingleAsync(e => e.Code == Contants.USER_GROUP_CUSTOMER);
 
                                 // Generate Password
                                 string randomPassword = RandomUtilities.RandomString(8);
                                 string password = SecurityUtils.HashSHA1(randomPassword);
-                                Users userCores = new Users()
+                                UserCores userCores = new UserCores()
                                 {
                                     Deleted = false,
                                     Active = true,
@@ -247,7 +249,7 @@ namespace QuanLy.Core.Controllers
                                     UserFullName = item.FullName,
                                     UserGroupIds = customerGroup != null ? new List<int>() { customerGroup.Id } : null,
                                 };
-                                bool successAddUser = await this.userService.CreateAsync(userCores);
+                                bool successAddUser = await this.userCoreService.CreateAsync(userCores);
                                 // Tạo user thành công => gửi mật khẩu đến user qua sms
                                 if (successAddUser)
                                     await this.SendUserPasswordSMS(userCores.Phone, randomPassword);
@@ -384,17 +386,17 @@ namespace QuanLy.Core.Controllers
                         // Check thêm thông tin user khách hàng nếu trạng thái CSKH là đã liên hệ
                         if (item.Status == (int)CatalogueEnums.ContactCustomerStatus.Connected)
                         {
-                            var existUser = await this.userService.GetSingleAsync(e => !e.Deleted && e.Active && e.Phone == item.Phone);
+                            var existUser = await this.userCoreService.GetSingleAsync(e => !e.Deleted && e.Active && e.Phone == item.Phone);
                             // Không có thông tin user => Thêm mới user
                             if (existUser == null)
                             {
                                 // Add nhóm khách cho user
-                                var customerGroup = await this.userGroupService.GetSingleAsync(e => e.Code == Contants.USER_GROUP_CUSTOMER);
+                                var customerGroup = await this.userGroupCoreService.GetSingleAsync(e => e.Code == Contants.USER_GROUP_CUSTOMER);
 
                                 // Generate Password
                                 string randomPassword = RandomUtilities.RandomString(8);
                                 string password = SecurityUtils.HashSHA1(randomPassword);
-                                Users userCores = new Users()
+                                UserCores userCores = new UserCores()
                                 {
                                     Deleted = false,
                                     Active = true,
@@ -410,7 +412,7 @@ namespace QuanLy.Core.Controllers
                                     UserFullName = item.FullName,
                                     UserGroupIds = customerGroup != null ? new List<int>() { customerGroup.Id } : null,
                                 };
-                                bool successAddUser = await this.userService.CreateAsync(userCores);
+                                bool successAddUser = await this.userCoreService.CreateAsync(userCores);
                                 // Tạo user thành công => gửi mật khẩu đến user qua sms
                                 if (successAddUser)
                                     await this.SendUserPasswordSMS(userCores.Phone, randomPassword);
@@ -506,17 +508,17 @@ namespace QuanLy.Core.Controllers
                 // Thêm mới thông tin khách hàng nếu trạng thái là đã liên hệ
                 if (status == (int)CatalogueEnums.ContactCustomerStatus.Connected)
                 {
-                    var existUser = await this.userService.GetSingleAsync(e => !e.Deleted && e.Active && e.Phone == existContactCustomer.Phone);
+                    var existUser = await this.userCoreService.GetSingleAsync(e => !e.Deleted && e.Active && e.Phone == existContactCustomer.Phone);
                     // Không có thông tin user => Thêm mới user
                     if (existUser == null)
                     {
                         // Add nhóm khách cho user
-                        var customerGroup = await this.userGroupService.GetSingleAsync(e => e.Code == Contants.USER_GROUP_CUSTOMER);
+                        var customerGroup = await this.userGroupCoreService.GetSingleAsync(e => e.Code == Contants.USER_GROUP_CUSTOMER);
 
                         // Generate Password
                         string randomPassword = RandomUtilities.RandomString(8);
                         string password = SecurityUtils.HashSHA1(randomPassword);
-                        Users userCores = new Users()
+                        UserCores userCores = new UserCores()
                         {
                             Deleted = false,
                             Active = true,
@@ -532,7 +534,7 @@ namespace QuanLy.Core.Controllers
                             UserFullName = existContactCustomer.FullName,
                             UserGroupIds = customerGroup != null ? new List<int>() { customerGroup.Id } : null,
                         };
-                        bool successAddUser = await this.userService.CreateAsync(userCores);
+                        bool successAddUser = await this.userCoreService.CreateAsync(userCores);
                         // Tạo user thành công => gửi mật khẩu đến user qua sms
                         if (successAddUser)
                             await this.SendUserPasswordSMS(userCores.Phone, randomPassword);

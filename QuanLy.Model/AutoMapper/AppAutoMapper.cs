@@ -87,6 +87,12 @@ namespace QuanLy.Model
             CreateMap<RequestProjectServiceHistoriesModel, ProjectServiceHistories>().ReverseMap();
             CreateMap<PagedList<ProjectServiceHistoriesModel>, PagedList<ProjectServiceHistories>>().ReverseMap();
 
+            CreateMap<RequestProjectFileModel, ProjectFiles>().ReverseMap();
+
+            CreateMap<RequestProjectSessionPayModel, ProjectSessionPays>().ReverseMap();
+            CreateMap<ProjectSessionPayModel, ProjectSessionPays>().ReverseMap();
+            CreateMap<PagedList<ProjectSessionPayModel>, PagedList<ProjectSessionPays>>().ReverseMap();
+
             #endregion
 
             #region Contact Customer

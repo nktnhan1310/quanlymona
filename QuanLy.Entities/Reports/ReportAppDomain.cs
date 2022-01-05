@@ -10,5 +10,10 @@ namespace QuanLy.Entities
         /// Số thứ tự báo cáo
         /// </summary>
         public long RowNumber { get; set; }
+
+        /// <summary>
+        /// Tổng số item của báo cáo
+        /// </summary>
+        public int TotalItem { get; set; }
     }
 }

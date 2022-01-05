@@ -1,4 +1,5 @@
-﻿using App.Core.Utilities;
+﻿using App.Core.Interface.Services;
+using App.Core.Utilities;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,7 @@ namespace QuanLy.Core.Controllers.WebHooks
         protected IMapper mapper;
         protected IContactCustomerService contactCustomerService;
         protected IUserService userService;
+        protected IUserCoreService userCoreService;
         protected IRequestTypeService requestTypeService;
         protected IContactCustomerMappingRequestService contactCustomerMappingRequestService;
         protected ISourceTypeService sourceTypeService;
@@ -66,6 +68,7 @@ namespace QuanLy.Core.Controllers.WebHooks
             contactCustomerMappingUserService = serviceProvider.GetRequiredService<IContactCustomerMappingUserService>();
             projectServiceService = serviceProvider.GetRequiredService<IProjectServiceService>();
             projectTaskService = serviceProvider.GetRequiredService<IProjectTaskService>();
+            userCoreService = serviceProvider.GetRequiredService<IUserCoreService>();
             this.mapper = mapper;
             this.hubContext = hubContext;
 
@@ -93,7 +96,7 @@ namespace QuanLy.Core.Controllers.WebHooks
                 };
             }
             // Lấy thông tin liên hệ khách theo ngày và số điện thoại
-            var existUser = await this.userService.GetSingleAsync(e => e.Phone == customerContactRequestFromForm.phone);
+            var existUser = await this.userCoreService.GetSingleAsync(e => e.Phone == customerContactRequestFromForm.phone);
 
             // Lấy thông tin liên hệ đã tồn tại trong ngày
             var existContactCustomer = await this.contactCustomerService.GetExistContactCustomer(customerContactRequestFromForm.phone, string.Empty);
@@ -397,7 +400,7 @@ namespace QuanLy.Core.Controllers.WebHooks
                 var existContactCustomer = await this.contactCustomerService.GetExistContactCustomer(customerContactRequest.Phone, string.Empty);
 
                 // Lấy thông tin liên hệ khách theo ngày và số điện thoại
-                var existUser = await this.userService.GetSingleAsync(e => e.Phone == customerContactRequest.Phone);
+                var existUser = await this.userCoreService.GetSingleAsync(e => e.Phone == customerContactRequest.Phone);
 
                 // Lấy thông tin source type tawk
                 var sourceTypeTawk = await this.sourceTypeService.GetSingleAsync(e => !e.Deleted && e.Active
@@ -892,7 +895,7 @@ namespace QuanLy.Core.Controllers.WebHooks
                 var existContactCustomer = await this.contactCustomerService.GetExistContactCustomer(contactCustomerPhoneRequest.CallNumber, string.Empty);
 
                 // Lấy thông tin khách hàng theo số điện thoại
-                var existUser = await this.userService.GetSingleAsync(e => !e.Deleted && e.Phone == contactCustomerPhoneRequest.CallNumber);
+                var existUser = await this.userCoreService.GetSingleAsync(e => !e.Deleted && e.Phone == contactCustomerPhoneRequest.CallNumber);
                 // Lấy thông tin source Tawk
                 var sourceTypePhone = await this.sourceTypeService.GetSingleAsync(e => e.Code == CatalogueEnums.ContactCustomerSourceCatalogue.PHONE.ToString());
                 if (sourceTypePhone == null)
@@ -1014,7 +1017,7 @@ namespace QuanLy.Core.Controllers.WebHooks
                     if (mappingUserInfo != null)
                     {
                         userId = mappingUserInfo != null ? mappingUserInfo.UserId : null;
-                        var userInfo = await this.userService.GetByIdAsync(userId ?? 0);
+                        var userInfo = await this.userCoreService.GetByIdAsync(userId ?? 0);
                         if (userInfo != null)
                             userFullName = userInfo.UserFullName + " (" + userInfo.Phone + ")";
                     }

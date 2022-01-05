@@ -12,6 +12,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace QuanLy.Service
 {
@@ -20,7 +21,7 @@ namespace QuanLy.Service
         protected readonly IUnitOfWork unitOfWork;
         protected readonly IMapper mapper;
         protected readonly IAppDbContext Context;
-        public ReportCoreService(IUnitOfWork unitOfWork, IMapper mapper, IAppDbContext  context)
+        public ReportCoreService(IUnitOfWork unitOfWork, IMapper mapper, IAppDbContext context)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
@@ -63,14 +64,13 @@ namespace QuanLy.Service
         /// <returns></returns>
         protected virtual SqlParameter[] GetSqlParameters(T baseSearch)
         {
-            SqlParameter[] parameters =
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+            foreach (PropertyInfo prop in baseSearch.GetType().GetProperties())
             {
-                new SqlParameter("@PageIndex", baseSearch.PageIndex),
-                new SqlParameter("@PageSize", baseSearch.PageSize),
-                new SqlParameter("@SearchContent", baseSearch.SearchContent),
-                new SqlParameter("@OrderBy", baseSearch.OrderBy),
-                new SqlParameter("@TotalPage", SqlDbType.Int, 0),
-            };
+                if (prop.Name == "IsExport") continue;
+                sqlParameters.Add(new SqlParameter(prop.Name, prop.GetValue(baseSearch, null)));
+            }
+            SqlParameter[] parameters = sqlParameters.ToArray();
             return parameters;
         }
 
@@ -95,12 +95,14 @@ namespace QuanLy.Service
                     connection.Open();
                     command.CommandText = commandText;
                     command.Parameters.AddRange(sqlParameters);
-                    command.Parameters["@TotalPage"].Direction = ParameterDirection.Output;
+                    //command.Parameters["@TotalPage"].Direction = ParameterDirection.Output;
                     command.CommandType = CommandType.StoredProcedure;
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(command);
                     sqlDataAdapter.Fill(dataTable);
-                    pagedList.TotalItem = int.Parse(command.Parameters["@TotalPage"].Value.ToString());
+                    //pagedList.TotalItem = int.Parse(command.Parameters["@TotalPage"].Value.ToString());
                     pagedList.Items = MappingDataTable.ConvertToList<R>(dataTable);
+                    if (pagedList.Items != null && pagedList.Items.Any())
+                        pagedList.TotalItem = pagedList.Items.FirstOrDefault().TotalItem;
                     return pagedList;
                 }
                 finally

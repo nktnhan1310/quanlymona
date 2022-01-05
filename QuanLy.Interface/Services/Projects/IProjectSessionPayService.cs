@@ -7,7 +7,7 @@ using System.Text;
 
 namespace QuanLy.Interface
 {
-    public interface IProjectSessionPayService : IDomainService<ProjectSessionPays, BaseSearch>
+    public interface IProjectSessionPayService : IDomainService<ProjectSessionPays, SearchProjectSessionPay>
     {
     }
 }

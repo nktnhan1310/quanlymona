@@ -21,9 +21,9 @@ namespace QuanLy.Core.Controllers.Project
     [ApiController]
     [Authorize]
     [Description("Quản lý thông tin comment của project")]
-    public class ProjectCommentController : BaseController<ProjectComments, ProjectCommentModel, RequestProjectCommentModel, BaseSearch>
+    public class ProjectCommentController : BaseController<ProjectComments, ProjectCommentModel, RequestProjectCommentModel, SearchProjectComment>
     {
-        public ProjectCommentController(IServiceProvider serviceProvider, ILogger<BaseController<ProjectComments, ProjectCommentModel, RequestProjectCommentModel, BaseSearch>> logger, IWebHostEnvironment env) : base(serviceProvider, logger, env)
+        public ProjectCommentController(IServiceProvider serviceProvider, ILogger<BaseController<ProjectComments, ProjectCommentModel, RequestProjectCommentModel, SearchProjectComment>> logger, IWebHostEnvironment env) : base(serviceProvider, logger, env)
         {
             this.domainService = serviceProvider.GetRequiredService<IProjectCommentService>();
         }

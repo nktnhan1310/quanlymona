@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuanLy.Entities;
 using QuanLy.Interface;
+using QuanLy.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -76,6 +77,8 @@ namespace QuanLy.Service
                 {
                     user.Created = DateTime.UtcNow.AddHours(7);
                     user.CreatedBy = item.CreatedBy;
+                    user.ProjectId = item.Id;
+                    user.Type = (int)CatalogueEnums.ProjectUserType.User;
                     this.unitOfWork.Repository<ProjectUsers>().Create(user);
                 }
             }

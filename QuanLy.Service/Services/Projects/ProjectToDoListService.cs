@@ -1,4 +1,5 @@
-﻿using App.Core.Interface.DbContext;
+﻿using App.Core.Extensions;
+using App.Core.Interface.DbContext;
 using App.Core.Interface.UnitOfWork;
 using App.Core.Service;
 using App.Core.Utilities;
@@ -155,6 +156,31 @@ namespace QuanLy.Service
                 item.CreatedBy = UserCreate;
                 item.ProjectId = GetDataTask.ProjectId;
                 item.Active = true;
+            }
+            return message;
+        }
+
+        public override async Task<string> GetExistItemMessage(ProjectToDoList item)
+        {
+            string message = "";
+            var GetData = await this.unitOfWork.Repository<ProjectToDoList>().GetQueryable().Where(x => x.Id == item.Id).AnyAsync();
+            if (!GetData)
+            {
+                message = "Không có dữ liệu item";
+            }
+            else
+            {
+                var GetDataTask = await this.unitOfWork.Repository<ProjectTasks>().GetQueryable().FirstOrDefaultAsync(x => x.Id == item.TaskId);
+                if (GetDataTask == null)
+                {
+                    message = $"Không có dữ liệu cửa Task có Title là : {item.Title}";
+                }
+                var GetUserInTask = await this.unitOfWork.Repository<ProjectUsers>().GetQueryable()
+                    .Where(x => x.TaskId == GetDataTask.Id).Select(x => x.UserId).ToListAsync();
+                if (!GetUserInTask.Contains(item.UserId))
+                {
+                    message = $"User không có trong Task có Title là : {item.Title}";
+                }
             }
             return message;
         }

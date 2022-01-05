@@ -53,7 +53,7 @@ namespace QuanLy.Core.Controllers.Catalogue
             var DataServiceType = this.catalogueService.GetById(id);
             if(DataServiceType == null)
             {
-                throw new Exception("Không được xóa của User khác");
+                throw new Exception("Không có dữ liệu của item");
             }
             else
             {

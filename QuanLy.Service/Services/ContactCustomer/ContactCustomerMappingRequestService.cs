@@ -25,7 +25,7 @@ namespace QuanLy.Service
             string result = string.Empty;
 
             bool isExistMappingRequest = await this.unitOfWork.Repository<ContactCustomerMappingRequests>().GetQueryable()
-                .AnyAsync(e => !e.Deleted && e.Active && e.Id != item.Id && e.RequestId == item.RequestId && e.SourceId == item.SourceId);
+                .AnyAsync(e => !e.Deleted && e.Active && e.Id != item.Id && e.RequestId == item.RequestId && e.SourceId == item.SourceId && e.ContactCustomerId == item.ContactCustomerId);
             if (isExistMappingRequest)
                 messages.Add("Yêu cầu đã tồn tại");
 

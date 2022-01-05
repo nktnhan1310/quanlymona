@@ -10,10 +10,15 @@ using System.Text;
 
 namespace QuanLy.Service
 {
-    public class ProjectCommentService : DomainService<ProjectComments, BaseSearch>, IProjectCommentService
+    public class ProjectCommentService : DomainService<ProjectComments, SearchProjectComment>, IProjectCommentService
     {
         public ProjectCommentService(IAppUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
+        }
+
+        protected override string GetStoreProcName()
+        {
+            return "Mona_sp_Load_ProjectComment_PagingData";
         }
     }
 }

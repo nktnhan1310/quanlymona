@@ -102,6 +102,7 @@ namespace QuanLy.Model
         /// Số ngày task gần đến hạn
         /// </summary>
         public int? NumberOverDue { get; set; }
+        public string ListUserId { get; set; }
         #endregion
     }
 }

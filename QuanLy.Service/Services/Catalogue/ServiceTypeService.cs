@@ -47,7 +47,7 @@ namespace QuanLy.Service.Services.Catalogue
 
         public async Task<bool> CheckServiceTypeExistProjectService(int id)
         {
-            return await this.unitOfWork.Repository<ProjectServices>().GetQueryable().AnyAsync(x => x.Id == id && !x.Deleted && x.Active);
+            return await this.unitOfWork.Repository<ProjectServices>().GetQueryable().AnyAsync(x => x.ServiceTypeId == id && !x.Deleted && x.Active);
         }
     }
 }

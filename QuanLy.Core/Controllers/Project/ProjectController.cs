@@ -1,6 +1,7 @@
 ﻿using App.Core.Controllers;
 using App.Core.Entities;
 using App.Core.Extensions;
+using App.Core.Interface.Services;
 using App.Core.Interface.Services.Configuration;
 using App.Core.Service;
 using App.Core.Utilities;
@@ -38,6 +39,7 @@ namespace QuanLy.Core.Controllers.Project
         protected IHolidayConfigService holidayConfigService;
         protected IProjectUserService projectUserService;
         protected IUserService userService;
+        protected IUserCoreService userCoreService;
         protected ISMSEmailTemplateCoreService sMSEmailTemplateService;
         protected ISMSConfigurationCoreService sMSConfigurationService;
         protected IProjectTaskService projectTaskService;
@@ -53,7 +55,7 @@ namespace QuanLy.Core.Controllers.Project
             sMSEmailTemplateService = serviceProvider.GetRequiredService<ISMSEmailTemplateCoreService>();
             sMSConfigurationService = serviceProvider.GetRequiredService<ISMSConfigurationCoreService>();
             projectTaskService = serviceProvider.GetRequiredService<IProjectTaskService>();
-
+            userCoreService = serviceProvider.GetRequiredService<IUserCoreService>();
             this.configuration = configuration;
         }
 
@@ -64,7 +66,7 @@ namespace QuanLy.Core.Controllers.Project
         /// <param name="itemModel"></param>
         /// <returns></returns>
         [HttpPost]
-        [AppAuthorize(new string[] { CoreContants.AddNew })]
+        [AppAuthorize(new string[] { CoreContants.AddNew})]
         public override async Task<AppDomainResult> AddItem([FromBody] RequestProjectModel itemModel)
         {
             AppDomainResult appDomainResult = new AppDomainResult();
@@ -83,57 +85,88 @@ namespace QuanLy.Core.Controllers.Project
 
             // ------------------------- START Tính toán ngày kết thúc của dự án
             DateTime? endDate = null;
-            DateTime? startDate = null;
             DateTime? dateCheck = null;
-            int totalDayResult = 0;
+            // TỔNG SỐ NGÀY NGHỈ
+            int totalDayOff = 0;
             if (itemUpdate.StartDate.HasValue && itemUpdate.DateTypeId.HasValue)
             {
-                startDate = itemUpdate.StartDate.Value;
+                dateCheck = itemUpdate.StartDate.Value;
                 switch (itemUpdate.DateTypeId)
                 {
+
                     case (int)CatalogueEnums.DateProjectType.Date:
                         {
-                            dateCheck = itemUpdate.StartDate.Value.AddDays(itemUpdate.QuantityTime ?? 0);
+                            endDate = itemUpdate.StartDate.Value.AddDays(itemUpdate.QuantityTime ?? 0);
                         }
                         break;
                     case (int)CatalogueEnums.DateProjectType.Month:
                         {
-                            dateCheck = itemUpdate.StartDate.Value.AddDays((itemUpdate.QuantityTime ?? 0) * 7);
+                            endDate = itemUpdate.StartDate.Value.AddMonths((itemUpdate.QuantityTime ?? 0));
                         }
                         break;
                     case (int)CatalogueEnums.DateProjectType.Year:
                         {
-                            dateCheck = itemUpdate.StartDate.Value.AddMonths(itemUpdate.QuantityTime ?? 0);
+                            endDate = itemUpdate.StartDate.Value.AddYears(itemUpdate.QuantityTime ?? 0);
                         }
                         break;
                     default:
                         break;
                 }
                 // Kiểm tra + tính toán ra ngày kết thúc của dự án
-                if (startDate.HasValue && dateCheck.HasValue)
+                if (dateCheck.HasValue && endDate.HasValue)
                 {
-                    totalDayResult = Convert.ToInt32((dateCheck.Value - startDate.Value).TotalDays);
-                    int totalDayAdd = 0;
-                    // Kiểm tra có ngày nghỉ hoặc t7/cn thì + thêm 1 ngày
-                    for (int i = 0; i < totalDayResult; i++)
+                    totalDayOff = itemModel.QuantityTime.Value;
+                    // NGÀY KẾT THÚC TASK DỰ TÍNH
+                    var workDate = endDate.Value;
+                    while (dateCheck.Value.Date <= workDate.Date)
                     {
-                        dateCheck = startDate.Value.Date.AddDays(i);
                         var holidayConfig = await this.holidayConfigService.GetSingleAsync(e => !e.Deleted && e.Active
-                        && e.FromDate.HasValue && e.FromDate.Value.Date <= dateCheck.Value.Date
-                        && e.ToDate.HasValue && e.ToDate.Value.Date >= dateCheck.Value.Date
-                        );
+                            && e.FromDate.HasValue && e.FromDate.Value.Date <= dateCheck.Value.Date
+                            && e.ToDate.HasValue && e.ToDate.Value.Date >= dateCheck.Value.Date
+                            );
+
                         if (holidayConfig != null)
                         {
-                            totalDayAdd += (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
-                            i += (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
+                            // TỔNG SỐ NGÀY OFF TRONG KÌ NGHỈ ĐƯỢC CẤU HÌNH
+                            var totalHolidayConfigOff = (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
+                            totalDayOff += totalHolidayConfigOff;
+                            workDate = workDate.AddDays(totalHolidayConfigOff);
+                            dateCheck = dateCheck.Value.AddDays(totalHolidayConfigOff);
+                            continue;
                         }
                         else
                         {
                             if (dateCheck.Value.Date.DayOfWeek == DayOfWeek.Saturday || dateCheck.Value.Date.DayOfWeek == DayOfWeek.Sunday)
-                                totalDayAdd++;
+                            {
+                                workDate = workDate.AddDays(1);
+                                totalDayOff++;
+                            }
                         }
+                        dateCheck = dateCheck.Value.AddDays(1);
                     }
-                    endDate = startDate.Value.AddDays(totalDayAdd);
+                    itemUpdate.EndDate = itemUpdate.StartDate.Value.AddDays(totalDayOff - 1);
+                    //totalDayResult = Convert.ToInt32((dateCheck.Value - startDate.Value).TotalDays);
+                    //int totalDayAdd = 0;
+                    //// Kiểm tra có ngày nghỉ hoặc t7/cn thì + thêm 1 ngày
+                    //for (int i = 0; i < totalDayResult; i++)
+                    //{
+                    //    dateCheck = startDate.Value.Date.AddDays(i);
+                    //    var holidayConfig = await this.holidayConfigService.GetSingleAsync(e => !e.Deleted && e.Active
+                    //    && e.FromDate.HasValue && e.FromDate.Value.Date <= dateCheck.Value.Date
+                    //    && e.ToDate.HasValue && e.ToDate.Value.Date >= dateCheck.Value.Date
+                    //    );
+                    //    if (holidayConfig != null)
+                    //    {
+                    //        totalDayAdd += (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
+                    //        i += (holidayConfig.ToDate.Value - holidayConfig.FromDate.Value).Days + 1;
+                    //    }
+                    //    else
+                    //    {
+                    //        if (dateCheck.Value.Date.DayOfWeek == DayOfWeek.Saturday || dateCheck.Value.Date.DayOfWeek == DayOfWeek.Sunday)
+                    //            totalDayAdd++;
+                    //    }
+                    //}
+                    //endDate = startDate.Value.AddDays(totalDayAdd);
                     //while (startDate.Value <= dateCheck.Value)
                     //{
                     //    var hospitalConfig = await this.holidayConfigService.GetSingleAsync(e => !e.Deleted && e.Active
@@ -202,7 +235,7 @@ namespace QuanLy.Core.Controllers.Project
                 // Kiểm tra thông tin khách
                 if (!string.IsNullOrEmpty(itemModel.CustomerPhone))
                 {
-                    var existCustomer = await this.userService.GetSingleAsync(e => !e.Deleted && e.Active && e.Phone == itemModel.CustomerPhone);
+                    var existCustomer = await this.userCoreService.GetSingleAsync(e => !e.Deleted && e.Active && e.Phone == itemModel.CustomerPhone);
                     int? userId = null;
                     // Nếu chưa có thông tin => Thêm mới thông tin khách
                     if (existCustomer == null)
@@ -210,7 +243,7 @@ namespace QuanLy.Core.Controllers.Project
                         string randomPassword = RandomUtilities.RandomString(8);
                         string password = SecurityUtils.HashSHA1(randomPassword);
                         // Thêm thông tin cho khách
-                        Users userCores = new Users()
+                        UserCores userCores = new UserCores()
                         {
                             Created = DateTime.UtcNow.AddHours(7),
                             CreatedBy = LoginContext.Instance.CurrentUser.UserName,
@@ -219,7 +252,7 @@ namespace QuanLy.Core.Controllers.Project
                             UserName = itemModel.CustomerPhone,
                             Password = password
                         };
-                        bool successUser = await this.userService.CreateAsync(userCores);
+                        bool successUser = await this.userCoreService.CreateAsync(userCores);
                         if (successUser)
                         {
                             userId = userCores.Id;
@@ -236,7 +269,7 @@ namespace QuanLy.Core.Controllers.Project
                         CreatedBy = LoginContext.Instance.CurrentUser.UserName,
                         ProjectId = itemUpdate.Id,
                         UserId = userId,
-                        Type = (int)CatalogueEnums.ProjectUserType.User
+                        Type = (int)CatalogueEnums.ProjectUserType.Staff
                     };
                     await this.projectUserService.CreateAsync(projectUsers);
                 }

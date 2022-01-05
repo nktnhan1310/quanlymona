@@ -62,5 +62,28 @@ namespace QuanLy.Core.Controllers
             appDomainResult.Success = success;
             return appDomainResult;
         }
+
+        public override async Task<AppDomainResult> UpdateItem([FromBody] RequestProjectToDoListModel itemModel)
+        {
+            if (!ModelState.IsValid) throw new AppException(ModelState.GetErrorMessage());
+            bool success = false;
+            AppDomainResult appDomainResult = new AppDomainResult();
+            var itemUpdate = mapper.Map<ProjectToDoList>(itemModel);
+            var User = LoginContext.Instance.CurrentUser.UserName;
+            var Message = await this.ProjectToDoList.GetExistItemMessage(itemUpdate);
+            if (string.IsNullOrEmpty(Message))
+            {
+                success = true;
+                appDomainResult.ResultCode = (int)HttpStatusCode.OK;
+                itemUpdate.Updated = DateTime.Now;
+                itemUpdate.UpdatedBy = User;
+                itemUpdate.ToTime = itemUpdate.FromTime.Value.AddHours(itemUpdate.NumberHours);
+                await this.domainService.UpdateAsync(itemUpdate);
+            }
+            else
+                throw new KeyNotFoundException(Message);
+            appDomainResult.Success = success;
+            return appDomainResult;
+        }
     }
 }

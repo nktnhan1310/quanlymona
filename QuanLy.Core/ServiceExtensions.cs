@@ -57,6 +57,7 @@ namespace QuanLy.Core
             services.AddScoped<IProjectCommentService, ProjectCommentService>();
             services.AddScoped<IProjectServiceService, ProjectServiceService>();
             services.AddScoped<IProjectServiceHistories, ProjectServiceHistoriesService>();
+            services.AddScoped<IProjectSessionPayService, ProjectSessionPayService>();
 
             #endregion
 

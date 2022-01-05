@@ -63,13 +63,14 @@ namespace QuanLy.Core.Controllers.Catalogue
                         throw new AppException(messageUserCheck);
                     string folderUploadPath = string.Empty;
                     string filePath = string.Empty;
+                    string fileUploadPath = string.Empty;
                     if (!string.IsNullOrEmpty(item.LinkImg))
                     {
                         // Kiểm tra có tồn tại file trong temp chưa?
                         folderUploadPath = configuration.GetValue<string>("MySettings:FolderUpload");
                         filePath = Path.Combine(folderUploadPath, UPLOAD_FOLDER_NAME, TEMP_FOLDER_NAME, item.LinkImg);
                         string folderUploadUrl = Path.Combine(folderUploadPath, UPLOAD_FOLDER_NAME, Contants.COLOR_TASK_FOLDER);
-                        string fileUploadPath = Path.Combine(folderUploadUrl, Path.GetFileName(filePath));
+                        fileUploadPath = Path.Combine(folderUploadUrl, Path.GetFileName(filePath));
                         if (System.IO.File.Exists(filePath) && !System.IO.File.Exists(fileUploadPath))
                         {
                             FileUtils.CreateDirectory(folderUploadUrl);
@@ -83,23 +84,21 @@ namespace QuanLy.Core.Controllers.Catalogue
                     if (success)
                     {
                         // Xóa file trong folder temp nếu có
-                        if (!string.IsNullOrEmpty(folderUploadPath))
+                        if (!string.IsNullOrEmpty(filePath) && System.IO.File.Exists(filePath))
                         {
-                            System.IO.File.Delete(folderUploadPath);
+                            System.IO.File.Delete(filePath);
                         }
-
-
                         appDomainResult.ResultCode = (int)HttpStatusCode.OK;
                     }
                     else
                     {
                         // Xóa file trong folder temp nếu có
-                        if (!string.IsNullOrEmpty(folderUploadPath))
+                        if (!string.IsNullOrEmpty(fileUploadPath) && System.IO.File.Exists(filePath))
                         {
-                            System.IO.File.Delete(folderUploadPath);
+                            System.IO.File.Delete(fileUploadPath);
                         }
                         // Xóa file trong folder upload
-                        if (!string.IsNullOrEmpty(filePath))
+                        if (!string.IsNullOrEmpty(filePath) && System.IO.File.Exists(filePath))
                         {
                             System.IO.File.Delete(filePath);
                         }
@@ -143,13 +142,14 @@ namespace QuanLy.Core.Controllers.Catalogue
                         throw new AppException(messageUserCheck);
                     string folderUploadPath = string.Empty;
                     string filePath = string.Empty;
+                    string fileUploadPath = string.Empty;
                     if (!string.IsNullOrEmpty(item.LinkImg))
                     {
                         // Kiểm tra có tồn tại file trong temp chưa?
                         folderUploadPath = configuration.GetValue<string>("MySettings:FolderUpload");
                         filePath = Path.Combine(folderUploadPath, UPLOAD_FOLDER_NAME, TEMP_FOLDER_NAME, item.LinkImg);
                         string folderUploadUrl = Path.Combine(folderUploadPath, UPLOAD_FOLDER_NAME, Contants.COLOR_TASK_FOLDER);
-                        string fileUploadPath = Path.Combine(folderUploadUrl, Path.GetFileName(filePath));
+                        fileUploadPath = Path.Combine(folderUploadUrl, Path.GetFileName(filePath));
                         if (System.IO.File.Exists(filePath) && !System.IO.File.Exists(fileUploadPath))
                         {
                             FileUtils.CreateDirectory(folderUploadUrl);
@@ -163,21 +163,21 @@ namespace QuanLy.Core.Controllers.Catalogue
                     if (success)
                     {
                         // Xóa file trong folder temp nếu có
-                        if (!string.IsNullOrEmpty(folderUploadPath))
+                        if (!string.IsNullOrEmpty(filePath) && System.IO.File.Exists(filePath))
                         {
-                            System.IO.File.Delete(folderUploadPath);
+                            System.IO.File.Delete(filePath);
                         }
                         appDomainResult.ResultCode = (int)HttpStatusCode.OK;
                     }
                     else
                     {
                         // Xóa file trong folder temp nếu có
-                        if (!string.IsNullOrEmpty(folderUploadPath))
+                        if (!string.IsNullOrEmpty(fileUploadPath) && System.IO.File.Exists(filePath))
                         {
-                            System.IO.File.Delete(folderUploadPath);
+                            System.IO.File.Delete(fileUploadPath);
                         }
                         // Xóa file trong folder upload
-                        if (!string.IsNullOrEmpty(filePath))
+                        if (!string.IsNullOrEmpty(filePath) && System.IO.File.Exists(filePath))
                         {
                             System.IO.File.Delete(filePath);
                         }
